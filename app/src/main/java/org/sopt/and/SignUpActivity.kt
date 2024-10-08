@@ -1,5 +1,6 @@
 package org.sopt.and
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -74,6 +75,7 @@ fun SignUpScreen(modifier: Modifier = Modifier) {
         mutableStateOf(false)
     }
     val context = LocalContext.current
+    val activity = context as Activity
 
     Column(
         modifier = modifier
@@ -176,11 +178,15 @@ fun SignUpScreen(modifier: Modifier = Modifier) {
                     onClick = {
                         // 조건에 맞을 경우에만 화면 전환
                         if (isAbleEmail(userId) && isAblePassword(userPassWord)){
-                            Intent(context, SignInActivity::class.java).apply {
-                                context.startActivity(this)
+                            val resultIntent = Intent().apply {
+                                putExtra("userId", userId)
+                                putExtra("userPassWord", userPassWord)
                             }
+                            activity.setResult(Activity.RESULT_OK, resultIntent)
+                            activity.finish()
+                            Toast.makeText(context,"회원가입 성공",Toast.LENGTH_SHORT).show()
                         }else{
-                            Toast.makeText(context,"로그인 실패",Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context,"회원가입 실패",Toast.LENGTH_SHORT).show()
                         }
                     },
                     modifier = Modifier
