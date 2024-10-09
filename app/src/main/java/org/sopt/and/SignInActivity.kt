@@ -227,9 +227,11 @@ fun SignInScreen(modifier: Modifier = Modifier) {
                         action = {
                             TextButton(onClick = {
                                 snackbarVisible = false
-                                val intent = Intent(context, MyActivity::class.java)
-                                intent.putExtra("userId", userId)
-                                context.startActivity(intent)
+                                if(snackbarMessage == "로그인 성공"){
+                                    val intent = Intent(context, MyActivity::class.java)
+                                    intent.putExtra("userId", userId)
+                                    context.startActivity(intent)
+                                }
                             }) {
                                 Text("닫기", color = Color.White)
                             }
