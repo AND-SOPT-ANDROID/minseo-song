@@ -3,32 +3,21 @@ package org.sopt.and
 import android.app.Activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -60,7 +49,7 @@ class MyActivity : ComponentActivity() {
 fun MyScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val intent = (context as Activity).intent
-    val userId = intent.getStringExtra("userId")?:""
+    val userId = intent.getStringExtra(ID_KEY).orEmpty()
 
     Column(
         modifier = modifier
@@ -72,6 +61,7 @@ fun MyScreen(modifier: Modifier = Modifier) {
         ){
             Row(
                 modifier = Modifier
+                    .padding(bottom = 20.dp)
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -79,36 +69,28 @@ fun MyScreen(modifier: Modifier = Modifier) {
                     painter = painterResource(R.drawable.img_profile_select),
                     contentDescription = "",
                     modifier = Modifier
+                        .padding(end = 20.dp)
                         .size(60.dp)
                         .clip(CircleShape),
                     contentScale = ContentScale.Fit
                 )
-                Spacer(Modifier.width(20.dp))
                 Text(
-                    text = "$userId",
-                    color = Color.White
+                    text = "$userId" + stringResource(R.string.my_nickname),
+                    color = Color.White,
+                    modifier = Modifier.weight(1f)
                 )
-                Text(
-                    text = "님",
-                    color = Color.White
+                Image(
+                    painter = painterResource(R.drawable.outline_notifications_24),
+                    contentDescription = "",
+                    modifier = Modifier.padding(end = 20.dp)
                 )
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    Image(
-                        painter = painterResource(R.drawable.outline_notifications_24),
-                        contentDescription = ""
-                    )
-                    Spacer(Modifier.width(20.dp))
 
-                    Image(
-                        painter = painterResource(R.drawable.outline_settings_24),
-                        contentDescription = ""
-                    )
-                }
+                Image(
+                    painter = painterResource(R.drawable.outline_settings_24),
+                    contentDescription = ""
+                )
+
             }
-            Spacer(Modifier.height(20.dp))
 
             Text(
                 text = stringResource(R.string.my_text1),
@@ -116,9 +98,9 @@ fun MyScreen(modifier: Modifier = Modifier) {
             )
             Text(
                 text = stringResource(R.string.my_buy),
-                color = Color.White
+                color = Color.White,
+                modifier = Modifier.padding(bottom = 20.dp)
             )
-            Spacer(Modifier.height(20.dp))
 
             Text(
                 text = stringResource(R.string.my_text2),
@@ -140,35 +122,36 @@ fun MyScreen(modifier: Modifier = Modifier) {
                 text = stringResource(R.string.my_all),
                 color = Color.White,
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 50.dp)
             )
-            Spacer(Modifier.height(50.dp))
 
             Column(
                 modifier = Modifier
+                    .padding(bottom = 80.dp)
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
                 Image(
                     painter = painterResource(R.drawable.baseline_info_outline_24),
                     contentDescription = "",
-                    modifier = Modifier.size(80.dp)
+                    modifier = Modifier
+                        .padding(bottom = 10.dp)
+                        .size(80.dp)
                 )
-                Spacer(Modifier.height(10.dp))
                 Text(
                     text = stringResource(R.string.my_all_none),
                     color = Color.LightGray
                 )
             }
-            Spacer(Modifier.height(80.dp))
 
             Text(
                 text = stringResource(R.string.my_interest),
                 color = Color.White,
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 50.dp)
             )
-            Spacer(Modifier.height(50.dp))
 
             Column(
                 modifier = Modifier
@@ -178,9 +161,10 @@ fun MyScreen(modifier: Modifier = Modifier) {
                 Image(
                     painter = painterResource(R.drawable.baseline_info_outline_24),
                     contentDescription = "",
-                    modifier = Modifier.size(80.dp)
+                    modifier = Modifier
+                        .padding(bottom = 10.dp)
+                        .size(80.dp)
                 )
-                Spacer(Modifier.height(10.dp))
                 Text(
                     text = stringResource(R.string.my_interest_none),
                     color = Color.LightGray

@@ -46,6 +46,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import org.sopt.and.component.PasswordTextField
 import org.sopt.and.ui.theme.ANDANDROIDTheme
 
 class SignUpActivity : ComponentActivity() {
@@ -61,6 +62,10 @@ class SignUpActivity : ComponentActivity() {
         }
     }
 }
+
+const val PASSWORD_MIN_LENGTH = 8
+const val PASSWORD_MAX_LENGTH = 20
+val PASSWORD_REGEX = Regex("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@\$!%*?&])[A-Za-z\\d@\$!%*?&]{$PASSWORD_MIN_LENGTH,$PASSWORD_MAX_LENGTH}\$")
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -127,29 +132,13 @@ fun SignUpScreen(modifier: Modifier = Modifier) {
                 }
                 Spacer(Modifier.height(20.dp))
 
-                TextField(
+                PasswordTextField(
                     value = userPassWord,
-                    onValueChange = {userPassWord = it},
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    placeholder = {
-                        Text(
-                            text = stringResource(R.string.signup_password),
-                            color = Color.Gray
-                        )
-                    },
-                    colors = TextFieldDefaults.textFieldColors(
-                        containerColor = Color.DarkGray
-                    ),
-                    visualTransformation = if(passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                    trailingIcon = {
-                        Text(
-                            text = "show",
-                            color = Color.White,
-                            modifier = Modifier.clickable {
-                                passwordVisible = !passwordVisible
-                            }
-                        )
+                    onValueChange = { userPassWord = it },
+                    placeholder = stringResource(R.string.signin_password),
+                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    onTrailingIconClick = {
+                        passwordVisible = !passwordVisible
                     }
                 )
                 Spacer(Modifier.height(10.dp))
@@ -179,14 +168,17 @@ fun SignUpScreen(modifier: Modifier = Modifier) {
                         // 조건에 맞을 경우에만 화면 전환
                         if (isAbleEmail(userId) && isAblePassword(userPassWord)){
                             val resultIntent = Intent().apply {
-                                putExtra("userId", userId)
-                                putExtra("userPassWord", userPassWord)
+                                putExtra(ID_KEY, userId)
+                                putExtra(PASSWORD_KEY, userPassWord)
+                            }.also { resultIntent ->
+                                activity.apply {
+                                    setResult(Activity.RESULT_OK, resultIntent)
+                                    finish()
+                                }
                             }
-                            activity.setResult(Activity.RESULT_OK, resultIntent)
-                            activity.finish()
-                            Toast.makeText(context,"회원가입 성공",Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, (R.string.signup_success),Toast.LENGTH_SHORT).show()
                         }else{
-                            Toast.makeText(context,"회원가입 실패",Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, (R.string.signup_fail),Toast.LENGTH_SHORT).show()
                         }
                     },
                     modifier = Modifier
@@ -212,6 +204,5 @@ fun isAbleEmail(email: String): Boolean{
 }
 
 fun isAblePassword(password: String): Boolean{
-    val pattern = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@\$!%*?&])[A-Za-z\\d@\$!%*?&]{8,20}\$"
-    return Regex(pattern).matches(password)
+    return PASSWORD_REGEX.matches(password)
 }
