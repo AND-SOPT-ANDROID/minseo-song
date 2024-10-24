@@ -48,6 +48,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
+import org.sopt.and.component.IDTextField
 import org.sopt.and.component.PasswordTextField
 import org.sopt.and.ui.theme.ANDANDROIDTheme
 
@@ -104,19 +105,11 @@ fun SignInScreen(modifier: Modifier = Modifier) {
                 .background(color = Color.Black)
                 .padding(20.dp)
         ) {
-            TextField(
+            IDTextField(
                 value = userId,
-                onValueChange = { userId = it },
+                onValueChange = {userId = it},
                 modifier = Modifier.fillMaxWidth(),
-                placeholder = {
-                    Text(
-                        text = stringResource(R.string.signin_id),
-                        color = Color.Gray
-                    )
-                },
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color.DarkGray
-                )
+                placeholder = context.getString(R.string.signin_id)
             )
             Spacer(Modifier.height(5.dp))
 

@@ -14,6 +14,27 @@ import androidx.compose.ui.text.input.VisualTransformation
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+fun IDTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    placeholder: String,
+    modifier: Modifier = Modifier
+){
+    TextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = modifier,
+        placeholder = {
+            Text(text = placeholder, color = Color.Gray)
+        },
+        colors = TextFieldDefaults.textFieldColors(
+            containerColor = Color.DarkGray
+        )
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 fun PasswordTextField(
     value: String,
     onValueChange: (String) -> Unit,

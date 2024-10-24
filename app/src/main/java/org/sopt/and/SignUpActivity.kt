@@ -46,6 +46,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import org.sopt.and.component.IDTextField
 import org.sopt.and.component.PasswordTextField
 import org.sopt.and.ui.theme.ANDANDROIDTheme
 
@@ -101,20 +102,11 @@ fun SignUpScreen(modifier: Modifier = Modifier) {
                 )
                 Spacer(Modifier.height(20.dp))
 
-                TextField(
+                IDTextField(
                     value = userId,
                     onValueChange = {userId = it},
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    placeholder = {
-                        Text(
-                            text = stringResource(R.string.signup_id),
-                            color = Color.Gray
-                        )
-                    },
-                    colors = TextFieldDefaults.textFieldColors(
-                        containerColor = Color.DarkGray
-                    )
+                    modifier = Modifier.fillMaxWidth(),
+                    placeholder = context.getString(R.string.signup_id)
                 )
                 Spacer(Modifier.height(10.dp))
 
