@@ -1,4 +1,4 @@
-package org.sopt.and
+package org.sopt.and.ui.my
 
 import android.app.Activity
 import android.os.Bundle
@@ -7,7 +7,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,24 +28,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import org.sopt.and.R
+import org.sopt.and.ui.signin.ID_KEY
 import org.sopt.and.ui.theme.ANDANDROIDTheme
 
-class MyActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            ANDANDROIDTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    MyScreen(modifier = Modifier.padding(innerPadding))
-                }
-            }
-        }
-    }
-}
-
 @Composable
-fun MyScreen(modifier: Modifier = Modifier) {
+fun MyScreen(
+    navController: NavHostController,
+    modifier: Modifier = Modifier
+) {
     val context = LocalContext.current
     val intent = (context as Activity).intent
     val userId = intent.getStringExtra(ID_KEY).orEmpty()
