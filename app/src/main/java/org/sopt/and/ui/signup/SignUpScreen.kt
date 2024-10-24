@@ -1,12 +1,7 @@
 package org.sopt.and.ui.signup
 
 import android.app.Activity
-import android.content.Intent
-import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -20,8 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -38,13 +31,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import org.sopt.and.R
 import org.sopt.and.component.IDTextField
 import org.sopt.and.component.PasswordTextField
-import org.sopt.and.ui.signin.ID_KEY
-import org.sopt.and.ui.signin.PASSWORD_KEY
-import org.sopt.and.ui.theme.ANDANDROIDTheme
 
 const val PASSWORD_MIN_LENGTH = 8
 const val PASSWORD_MAX_LENGTH = 20
@@ -53,7 +44,8 @@ val PASSWORD_REGEX = Regex("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@\$!%*?&])[A-Za-z\\d@\
 @Composable
 fun SignUpScreen(
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: SignUpViewModel
 ) {
     var userId by remember {
         mutableStateOf("")
@@ -142,6 +134,8 @@ fun SignUpScreen(
                 Button(
                     onClick = {
                         if (isAbleEmail(userId) && isAblePassword(userPassWord)){
+                            viewModel.updateUserId(userId)
+                            viewModel.updateUserPassword(userPassWord)
                             navController.popBackStack()
                             Toast.makeText(context, (R.string.signup_success),Toast.LENGTH_SHORT).show()
                         }else{

@@ -1,8 +1,6 @@
 package org.sopt.and.ui.signin
 
-import android.app.Activity
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -26,9 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -43,34 +39,22 @@ import org.sopt.and.R
 import org.sopt.and.component.IDTextField
 import org.sopt.and.component.PasswordTextField
 import org.sopt.and.model.Routes
-
-const val ID_KEY = "id"
-const val PASSWORD_KEY = "password"
+import org.sopt.and.ui.signup.SignUpViewModel
 
 @Composable
 fun SignInScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    viewModel: SignInViewModel = viewModel()
+    signInViewModel: SignInViewModel,
+    signUpViewModel: SignUpViewModel
 ) {
-    val userId by viewModel::userId
-    val userPassword by viewModel::userPassword
-    val passwordVisible by viewModel::passwordVisible
-    val snackbarMessage by viewModel.snackbarMessage.collectAsState()
+    val userId by signInViewModel::userId
+    val userPassword by signInViewModel::userPassword
+    val passwordVisible by signInViewModel::passwordVisible
+    val snackbarMessage by signInViewModel.snackbarMessage.collectAsState()
 
-    var registeredId by remember { mutableStateOf("") }
-    var registeredPassword by remember { mutableStateOf("") }
-
-    val signUpLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            result.data?.let { data ->
-                registeredId = data.getStringExtra(ID_KEY).orEmpty()
-                registeredPassword = data.getStringExtra(PASSWORD_KEY).orEmpty()
-            }
-        }
-    }
+    val registeredId = signUpViewModel.userId
+    val registeredPassword = signUpViewModel.userPassword
 
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
@@ -91,7 +75,7 @@ fun SignInScreen(
                 }
             }
 
-            viewModel.clearSnackbarMessage()
+            signInViewModel.clearSnackbarMessage()
         }
     }
 
@@ -108,7 +92,7 @@ fun SignInScreen(
         ) {
             IDTextField(
                 value = userId,
-                onValueChange = viewModel::updateUserId,
+                onValueChange = signInViewModel::updateUserId,
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = context.getString(R.string.signin_id)
             )
@@ -116,18 +100,18 @@ fun SignInScreen(
 
             PasswordTextField(
                 value = userPassword,
-                onValueChange = viewModel::updateUserPassword,
+                onValueChange = signInViewModel::updateUserPassword,
                 placeholder = stringResource(R.string.signin_password),
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 onTrailingIconClick = {
-                    viewModel.togglePasswordVisibility()
+                    signInViewModel.togglePasswordVisibility()
                 }
             )
             Spacer(Modifier.height(30.dp))
 
             Button(
                 onClick = {
-                    viewModel.performLogin(registeredId, registeredPassword)
+                    signInViewModel.performLogin(registeredId, registeredPassword)
                 },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
