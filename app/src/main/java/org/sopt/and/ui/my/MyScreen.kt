@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,6 +37,7 @@ fun MyScreen(
     signInViewModel: SignInViewModel
 ) {
     val userId = signInViewModel.userId
+    val scrollState = rememberScrollState()
 
     Scaffold(
         bottomBar = { BottomBar(3, navController) }
@@ -105,6 +108,7 @@ fun MyScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(Color.Black)
+                    .verticalScroll(scrollState)
                     .padding(20.dp)
             ){
                 Text(
