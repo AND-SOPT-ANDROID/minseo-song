@@ -36,6 +36,7 @@ import org.sopt.and.R
 import org.sopt.and.component.BottomBar
 import org.sopt.and.component.TopBar
 import org.sopt.and.ui.home.model.getHomeRecommend
+import org.sopt.and.ui.home.model.getHomeTop20
 import org.sopt.and.ui.home.model.getHomeTopBanner
 import org.sopt.and.ui.home.model.homeCategory
 
@@ -47,6 +48,7 @@ fun HomeScreen(
 ) {
     val hometopimages = getHomeTopBanner()
     val homerecommendimages = getHomeRecommend()
+    val hometop20images = getHomeTop20()
 
     Scaffold(
         bottomBar = { BottomBar(1, navController) }
@@ -166,6 +168,55 @@ fun HomeScreen(
                                     .clip(RoundedCornerShape(8.dp))
                                     .size(160.dp, 240.dp)
                             )
+                        }
+                    }
+                }
+            }
+
+            item {
+                Column(
+                    modifier = Modifier.padding(top = 15.dp)
+                ) {
+                    Text(
+                        text = stringResource(R.string.home_today_top_20),
+                        fontSize = 20.sp,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(start = 20.dp, top = 15.dp, bottom = 15.dp)
+                    )
+
+                    LazyRow(
+                        contentPadding = PaddingValues(horizontal = 20.dp),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        modifier = Modifier.padding(bottom = 20.dp)
+                    ) {
+                        items(
+                            count = hometop20images.size,
+                            key = {item -> hometop20images[item].image}
+                        ){index ->
+                            Box(
+                                contentAlignment = Alignment.BottomStart
+                            ){
+                                AsyncImage(
+                                    model = ImageRequest.Builder(LocalContext.current)
+                                        .data(hometop20images[index].image)
+                                        .crossfade(true)
+                                        .build(),
+                                    contentDescription = "",
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .padding(bottom = 35.dp)
+                                        .clip(RoundedCornerShape(8.dp))
+                                        .size(160.dp, 240.dp)
+                                )
+                                Text(
+                                    text = (index+1).toString(),
+                                    fontSize = 60.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White,
+                                    modifier = Modifier.padding(start = 8.dp)
+                                )
+                            }
                         }
                     }
                 }
