@@ -1,4 +1,4 @@
-package org.sopt.and.model
+package org.sopt.and.ui.home.model
 
 import org.sopt.and.R
 
