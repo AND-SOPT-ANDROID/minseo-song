@@ -1,4 +1,4 @@
-package org.sopt.and.model
+package org.sopt.and.navigate
 
 sealed class Routes(val route: String) {
     object SignIn : Routes("SignIn")

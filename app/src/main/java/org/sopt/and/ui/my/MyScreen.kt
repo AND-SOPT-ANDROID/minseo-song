@@ -27,20 +27,21 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import org.sopt.and.R
-import org.sopt.and.component.BottomBar
+import org.sopt.and.component.Bar.BottomBar
+import org.sopt.and.navigate.Screen
 import org.sopt.and.ui.signin.SignInViewModel
 
 @Composable
 fun MyScreen(
     navController: NavHostController,
-    modifier: Modifier = Modifier,
     signInViewModel: SignInViewModel
 ) {
+
     val userId = signInViewModel.userId
     val scrollState = rememberScrollState()
 
     Scaffold(
-        bottomBar = { BottomBar(3, navController) }
+        bottomBar = { BottomBar(Screen.MY_PAGE, navController) }
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -67,7 +68,7 @@ fun MyScreen(
                         contentScale = ContentScale.Fit
                     )
                     Text(
-                        text = "$userId" + stringResource(R.string.my_nickname),
+                        text = stringResource(R.string.my_nickname, userId),
                         color = Color.White,
                         modifier = Modifier.weight(1f)
                     )

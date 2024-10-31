@@ -1,6 +1,5 @@
 package org.sopt.and.ui.signup
 
-import android.app.Activity
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -34,18 +33,15 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import org.sopt.and.R
-import org.sopt.and.component.IDTextField
-import org.sopt.and.component.PasswordTextField
+import org.sopt.and.component.TextField.IDTextField
+import org.sopt.and.component.TextField.PasswordTextField
 
-const val PASSWORD_MIN_LENGTH = 8
-const val PASSWORD_MAX_LENGTH = 20
-val PASSWORD_REGEX = Regex("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@\$!%*?&])[A-Za-z\\d@\$!%*?&]{$PASSWORD_MIN_LENGTH,$PASSWORD_MAX_LENGTH}\$")
 
 @Composable
 fun SignUpScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    viewModel: SignUpViewModel
+    signUpViewModel: SignUpViewModel
 ) {
     var userId by remember {
         mutableStateOf("")
@@ -57,7 +53,6 @@ fun SignUpScreen(
         mutableStateOf(false)
     }
     val context = LocalContext.current
-    val activity = context as Activity
 
     Column(
         modifier = modifier
@@ -133,9 +128,9 @@ fun SignUpScreen(
             ){
                 Button(
                     onClick = {
-                        if (isAbleEmail(userId) && isAblePassword(userPassWord)){
-                            viewModel.updateUserId(userId)
-                            viewModel.updateUserPassword(userPassWord)
+                        if (signUpViewModel.isAbleEmail(userId) && signUpViewModel.isAblePassword(userPassWord)){
+                            signUpViewModel.updateUserId(userId)
+                            signUpViewModel.updateUserPassword(userPassWord)
                             navController.popBackStack()
                             Toast.makeText(context, (R.string.signup_success),Toast.LENGTH_SHORT).show()
                         }else{
@@ -158,12 +153,4 @@ fun SignUpScreen(
             }
         }
     }
-}
-
-fun isAbleEmail(email: String): Boolean{
-    return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
-}
-
-fun isAblePassword(password: String): Boolean{
-    return PASSWORD_REGEX.matches(password)
 }

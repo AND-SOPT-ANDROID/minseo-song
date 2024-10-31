@@ -21,6 +21,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,28 +34,29 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.yield
 import org.sopt.and.R
-import org.sopt.and.component.BottomBar
-import org.sopt.and.component.TopBar
-import org.sopt.and.ui.home.model.getHomeRecommend
-import org.sopt.and.ui.home.model.getHomeTop20
-import org.sopt.and.ui.home.model.getHomeTopBanner
-import org.sopt.and.ui.home.model.homeCategory
+import org.sopt.and.component.Bar.BottomBar
+import org.sopt.and.component.Bar.TopBar
+import org.sopt.and.navigate.Screen
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
-    navController: NavHostController,
-    modifier: Modifier = Modifier
+    navController: NavHostController
 ) {
-    val hometopimages = getHomeTopBanner()
-    val homerecommendimages = getHomeRecommend()
-    val hometop20images = getHomeTop20()
+    val homeViewModel: HomeViewModel = viewModel()
+
+    val hometopimages by homeViewModel.homeTopImages.collectAsState()
+    val homerecommendimages by homeViewModel.homeRecommendImages.collectAsState()
+    val hometop20images by homeViewModel.homeTop20Images.collectAsState()
+    val homeCategory by homeViewModel.homeCategory.collectAsState()
+
     val pagerState = rememberPagerState(pageCount = { hometopimages.size })
 
     LaunchedEffect(pagerState){
@@ -66,7 +69,7 @@ fun HomeScreen(
     }
 
     Scaffold(
-        bottomBar = { BottomBar(1, navController) }
+        bottomBar = { BottomBar(Screen.HOME, navController) }
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
@@ -118,7 +121,7 @@ fun HomeScreen(
                         )
 
                         Text(
-                            text = "${index + 1} / ${hometopimages.size}",
+                            text = stringResource(R.string.image_counter, index+1, hometopimages.size),
                             color = Color.White,
                             fontSize = 14.sp,
                             modifier = Modifier

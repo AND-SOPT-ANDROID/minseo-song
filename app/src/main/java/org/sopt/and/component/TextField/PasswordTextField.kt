@@ -1,4 +1,4 @@
-package org.sopt.and.component
+package org.sopt.and.component.TextField
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,27 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun IDTextField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    placeholder: String,
-    modifier: Modifier = Modifier
-){
-    TextField(
-        value = value,
-        onValueChange = onValueChange,
-        modifier = modifier,
-        placeholder = {
-            Text(text = placeholder, color = Color.Gray)
-        },
-        colors = TextFieldDefaults.textFieldColors(
-            containerColor = Color.DarkGray
-        )
-    )
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -32,11 +32,12 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import org.sopt.and.R
-import org.sopt.and.component.IDTextField
-import org.sopt.and.component.PasswordTextField
-import org.sopt.and.model.Routes
+import org.sopt.and.component.TextField.IDTextField
+import org.sopt.and.component.TextField.PasswordTextField
+import org.sopt.and.navigate.Routes
 import org.sopt.and.ui.signup.SignUpViewModel
 
 @Composable
@@ -46,6 +47,7 @@ fun SignInScreen(
     signInViewModel: SignInViewModel,
     signUpViewModel: SignUpViewModel
 ) {
+
     val userId by signInViewModel::userId
     val userPassword by signInViewModel::userPassword
     val passwordVisible by signInViewModel::passwordVisible

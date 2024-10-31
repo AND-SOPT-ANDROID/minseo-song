@@ -7,24 +7,30 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class SignInViewModel : ViewModel() {
-    var userId by mutableStateOf("")
-    var userPassword by mutableStateOf("")
-    var passwordVisible by mutableStateOf(false)
+
+class SignInViewModel: ViewModel() {
+    private var _userId by mutableStateOf("")
+    val userId: String get() = _userId
+
+    private var _userPassword by mutableStateOf("")
+    val userPassword: String get() = _userPassword
+
+    private var _passwordVisible by mutableStateOf(false)
+    val passwordVisible: Boolean get() = _passwordVisible
 
     private val _snackbarMessage = MutableStateFlow<String?>(null)
     val snackbarMessage: StateFlow<String?> get() = _snackbarMessage
 
     fun updateUserId(id: String) {
-        userId = id
+        _userId = id
     }
 
     fun updateUserPassword(password: String) {
-        userPassword = password
+        _userPassword = password
     }
 
     fun togglePasswordVisibility() {
-        passwordVisible = !passwordVisible
+        _passwordVisible = !_passwordVisible
     }
 
     fun performLogin(registeredId: String, registeredPassword: String) {
