@@ -1,4 +1,4 @@
-package org.sopt.and.component
+package org.sopt.and.component.TextField
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
