@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import org.sopt.and.model.UserInfo
 
 const val PASSWORD_MIN_LENGTH = 8
 const val PASSWORD_MAX_LENGTH = 20
@@ -11,15 +12,10 @@ val PASSWORD_REGEX = Regex("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@\$!%*?&])[A-Za-z\\d@\
 
 
 class SignUpViewModel: ViewModel() {
-    var userId by mutableStateOf("")
-    var userPassword by mutableStateOf("")
+    var userInfo by mutableStateOf(UserInfo("",""))
 
-    fun updateUserId(id: String) {
-        userId = id
-    }
-
-    fun updateUserPassword(password: String) {
-        userPassword = password
+    fun updateUserInfo(id: String, password: String){
+        userInfo = userInfo.copy(userId = id, userPassWord = password)
     }
 
     fun isAbleEmail(email: String): Boolean{

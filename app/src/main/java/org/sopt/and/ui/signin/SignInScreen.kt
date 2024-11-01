@@ -23,7 +23,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -48,13 +50,18 @@ fun SignInScreen(
     signUpViewModel: SignUpViewModel
 ) {
 
-    val userId by signInViewModel::userId
-    val userPassword by signInViewModel::userPassword
+    var userId by remember {
+        mutableStateOf("")
+    }
+    var userPassWord by remember {
+        mutableStateOf("")
+    }
+
+    val userInfo by signInViewModel::userInfo
     val passwordVisible by signInViewModel::passwordVisible
     val snackbarMessage by signInViewModel.snackbarMessage.collectAsState()
 
-    val registeredId = signUpViewModel.userId
-    val registeredPassword = signUpViewModel.userPassword
+    val registeredInfo= signUpViewModel.userInfo
 
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
@@ -92,15 +99,15 @@ fun SignInScreen(
         ) {
             IDTextField(
                 value = userId,
-                onValueChange = signInViewModel::updateUserId,
+                onValueChange = {userId = it},
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = context.getString(R.string.signin_id)
             )
             Spacer(Modifier.height(5.dp))
 
             PasswordTextField(
-                value = userPassword,
-                onValueChange = signInViewModel::updateUserPassword,
+                value = userPassWord,
+                onValueChange = {userPassWord = it},
                 placeholder = stringResource(R.string.signin_password),
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 onTrailingIconClick = {
@@ -111,7 +118,8 @@ fun SignInScreen(
 
             Button(
                 onClick = {
-                    signInViewModel.performLogin(registeredId, registeredPassword)
+                    signInViewModel.updateUserInfo(userId, userPassWord)
+                    signInViewModel.performLogin(registeredInfo)
                 },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(

@@ -37,7 +37,7 @@ fun MyScreen(
     signInViewModel: SignInViewModel
 ) {
 
-    val userId = signInViewModel.userId
+    val userId = signInViewModel.userInfo.userId
     val scrollState = rememberScrollState()
 
     Scaffold(

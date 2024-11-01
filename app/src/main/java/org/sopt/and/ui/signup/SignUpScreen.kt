@@ -129,8 +129,7 @@ fun SignUpScreen(
                 Button(
                     onClick = {
                         if (signUpViewModel.isAbleEmail(userId) && signUpViewModel.isAblePassword(userPassWord)){
-                            signUpViewModel.updateUserId(userId)
-                            signUpViewModel.updateUserPassword(userPassWord)
+                            signUpViewModel.updateUserInfo(userId, userPassWord)
                             navController.popBackStack()
                             Toast.makeText(context, (R.string.signup_success),Toast.LENGTH_SHORT).show()
                         }else{
