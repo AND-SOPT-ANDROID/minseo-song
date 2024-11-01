@@ -49,7 +49,6 @@ fun SignInScreen(
     signInViewModel: SignInViewModel,
     signUpViewModel: SignUpViewModel
 ) {
-
     var userId by remember {
         mutableStateOf("")
     }
@@ -57,7 +56,6 @@ fun SignInScreen(
         mutableStateOf("")
     }
 
-    val userInfo by signInViewModel::userInfo
     val passwordVisible by signInViewModel::passwordVisible
     val snackbarMessage by signInViewModel.snackbarMessage.collectAsState()
 

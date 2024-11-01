@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import org.sopt.and.R
+import org.sopt.and.component.IconWithText
 import org.sopt.and.component.TextField.IDTextField
 import org.sopt.and.component.TextField.PasswordTextField
 
@@ -81,18 +82,10 @@ fun SignUpScreen(
                 )
                 Spacer(Modifier.height(10.dp))
 
-                Row {
-                    Image(
-                        painter = painterResource(R.drawable.baseline_info_outline_24),
-                        contentDescription = ""
-                    )
-                    Spacer(Modifier.width(5.dp))
-
-                    Text(
-                        text = stringResource(R.string.signup_id_explain),
-                        color = Color.Gray
-                    )
-                }
+                IconWithText(
+                    icon = painterResource(R.drawable.baseline_info_outline_24),
+                    text = stringResource(R.string.signup_id_explain)
+                )
                 Spacer(Modifier.height(20.dp))
 
                 PasswordTextField(
@@ -106,18 +99,10 @@ fun SignUpScreen(
                 )
                 Spacer(Modifier.height(10.dp))
 
-                Row {
-                    Image(
-                        painter = painterResource(R.drawable.baseline_info_outline_24),
-                        contentDescription = ""
-                    )
-                    Spacer(Modifier.width(5.dp))
-
-                    Text(
-                        text = stringResource(R.string.signup_password_explain),
-                        color = Color.Gray
-                    )
-                }
+                IconWithText(
+                    icon = painterResource(R.drawable.baseline_info_outline_24),
+                    text = stringResource(R.string.signup_password_explain)
+                )
             }
 
 
