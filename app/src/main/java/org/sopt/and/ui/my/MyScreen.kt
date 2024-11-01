@@ -2,10 +2,13 @@ package org.sopt.and.ui.my
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -28,6 +31,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import org.sopt.and.R
 import org.sopt.and.component.Bar.BottomBar
+import org.sopt.and.component.IconWithTitle
+import org.sopt.and.component.MyPageList
 import org.sopt.and.navigate.Screen
 import org.sopt.and.ui.signin.SignInViewModel
 
@@ -36,7 +41,6 @@ fun MyScreen(
     navController: NavHostController,
     signInViewModel: SignInViewModel
 ) {
-
     val userId = signInViewModel.userInfo.userId
     val scrollState = rememberScrollState()
 
@@ -85,24 +89,22 @@ fun MyScreen(
 
                 }
 
-                Text(
-                    text = stringResource(R.string.my_text1),
-                    color = Color.LightGray
-                )
-                Text(
-                    text = stringResource(R.string.my_buy),
-                    color = Color.White,
-                    modifier = Modifier.padding(bottom = 20.dp)
-                )
+                IconWithTitle(
+                    labelText = stringResource(R.string.my_text1),
+                    actionText = stringResource(R.string.my_buy),
+                    actionIcon = painterResource(R.drawable.baseline_navigate_next_24)
+                ) {
+                    TODO("결제창으로 넘어가기")
+                }
+                Spacer(Modifier.height(20.dp))
 
-                Text(
-                    text = stringResource(R.string.my_text2),
-                    color = Color.LightGray
-                )
-                Text(
-                    text = stringResource(R.string.my_buy),
-                    color = Color.White
-                )
+                IconWithTitle(
+                    labelText = stringResource(R.string.my_text2),
+                    actionText = stringResource(R.string.my_buy),
+                    actionIcon = painterResource(R.drawable.baseline_navigate_next_24)
+                ) {
+                    TODO("결제창으로 넘어가기")
+                }
             }
 
             Column(
@@ -112,58 +114,17 @@ fun MyScreen(
                     .verticalScroll(scrollState)
                     .padding(20.dp)
             ){
-                Text(
-                    text = stringResource(R.string.my_all),
-                    color = Color.White,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(bottom = 50.dp)
+                MyPageList(
+                    labelText = stringResource(R.string.my_all),
+                    icon = painterResource(R.drawable.baseline_info_outline_24),
+                    iconText = stringResource(R.string.my_all_none)
                 )
 
-                Column(
-                    modifier = Modifier
-                        .padding(bottom = 80.dp)
-                        .fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ){
-                    Image(
-                        painter = painterResource(R.drawable.baseline_info_outline_24),
-                        contentDescription = "",
-                        modifier = Modifier
-                            .padding(bottom = 10.dp)
-                            .size(80.dp)
-                    )
-                    Text(
-                        text = stringResource(R.string.my_all_none),
-                        color = Color.LightGray
-                    )
-                }
-
-                Text(
-                    text = stringResource(R.string.my_interest),
-                    color = Color.White,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(bottom = 50.dp)
+                MyPageList(
+                    labelText = stringResource(R.string.my_interest),
+                    icon = painterResource(R.drawable.baseline_info_outline_24),
+                    iconText = stringResource(R.string.my_interest_none)
                 )
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ){
-                    Image(
-                        painter = painterResource(R.drawable.baseline_info_outline_24),
-                        contentDescription = "",
-                        modifier = Modifier
-                            .padding(bottom = 10.dp)
-                            .size(80.dp)
-                    )
-                    Text(
-                        text = stringResource(R.string.my_interest_none),
-                        color = Color.LightGray
-                    )
-                }
             }
         }
     }
