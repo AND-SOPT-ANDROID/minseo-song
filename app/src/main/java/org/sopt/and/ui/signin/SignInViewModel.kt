@@ -12,18 +12,11 @@ import org.sopt.and.model.UserInfo
 class SignInViewModel : ViewModel() {
     var userInfo by mutableStateOf(UserInfo("", ""))
 
-    private var _passwordVisible by mutableStateOf(false)
-    val passwordVisible: Boolean get() = _passwordVisible
-
     private val _snackbarMessage = MutableStateFlow<String?>(null)
     val snackbarMessage: StateFlow<String?> get() = _snackbarMessage
 
     fun updateUserInfo(id: String, password: String) {
         userInfo = userInfo.copy(userId = id, userPassWord = password)
-    }
-
-    fun togglePasswordVisibility() {
-        _passwordVisible = !_passwordVisible
     }
 
     fun performLogin(registeredUserInfo: UserInfo) {

@@ -55,8 +55,6 @@ fun SignInScreen(
     var userPassWord by remember {
         mutableStateOf("")
     }
-
-    val passwordVisible by signInViewModel::passwordVisible
     val snackbarMessage by signInViewModel.snackbarMessage.collectAsState()
 
     val registeredInfo= signUpViewModel.userInfo
@@ -106,11 +104,7 @@ fun SignInScreen(
             PasswordTextField(
                 value = userPassWord,
                 onValueChange = {userPassWord = it},
-                placeholder = stringResource(R.string.signin_password),
-                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                onTrailingIconClick = {
-                    signInViewModel.togglePasswordVisibility()
-                }
+                placeholder = stringResource(R.string.signin_password)
             )
             Spacer(Modifier.height(30.dp))
 

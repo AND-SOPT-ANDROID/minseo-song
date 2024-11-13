@@ -50,9 +50,6 @@ fun SignUpScreen(
     var userPassWord by remember {
         mutableStateOf("")
     }
-    var passwordVisible by remember{
-        mutableStateOf(false)
-    }
     val context = LocalContext.current
 
     Column(
@@ -91,11 +88,7 @@ fun SignUpScreen(
                 PasswordTextField(
                     value = userPassWord,
                     onValueChange = { userPassWord = it },
-                    placeholder = stringResource(R.string.signin_password),
-                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                    onTrailingIconClick = {
-                        passwordVisible = !passwordVisible
-                    }
+                    placeholder = stringResource(R.string.signin_password)
                 )
                 Spacer(Modifier.height(10.dp))
 
