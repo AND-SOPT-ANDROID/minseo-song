@@ -10,14 +10,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import org.sopt.and.R
 
 @Composable
-fun IconWithTitle(
+fun BuyTextButton(
     labelText: String,
-    actionText: String,
-    actionIcon: Painter,
     onClick: ()->Unit
 ) {
     Column {
@@ -30,13 +30,13 @@ fun IconWithTitle(
                 .clickable { onClick }
         ) {
             Text(
-                text = actionText,
+                text = stringResource(R.string.my_buy),
                 color = Color.White,
                 modifier = Modifier.padding(bottom = 20.dp)
             )
 
             Image(
-                painter = actionIcon,
+                painter = painterResource(R.drawable.baseline_navigate_next_24),
                 contentDescription = null,
                 modifier = Modifier.size(24.dp)
             )

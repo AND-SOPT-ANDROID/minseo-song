@@ -8,13 +8,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import org.sopt.and.R
 
 @Composable
-fun IconWithText(
-    icon: Painter,
+fun InfoTextWithIcon(
     text: String,
     modifier: Modifier = Modifier,
     textColor: Color = Color.Gray,
@@ -22,7 +22,7 @@ fun IconWithText(
 ) {
     Row(modifier = modifier) {
         Image(
-            painter = icon,
+            painter = painterResource(R.drawable.baseline_info_outline_24),
             contentDescription = null
         )
         Spacer(Modifier.width(spacing))
