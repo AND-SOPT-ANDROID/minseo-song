@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun MyPageList(
+fun MyPageItem(
     labelText: String,
     icon: Painter,
     iconText: String

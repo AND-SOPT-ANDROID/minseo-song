@@ -10,9 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,7 +27,7 @@ import androidx.navigation.NavHostController
 import org.sopt.and.R
 import org.sopt.and.component.Bar.BottomBar
 import org.sopt.and.component.BuyTextButton
-import org.sopt.and.component.MyPageList
+import org.sopt.and.component.MyPageItem
 import org.sopt.and.navigate.Screen
 import org.sopt.and.ui.signin.SignInViewModel
 
@@ -38,7 +37,6 @@ fun MyScreen(
     signInViewModel: SignInViewModel
 ) {
     val userId = signInViewModel.userInfo.userId
-    val scrollState = rememberScrollState()
 
     Scaffold(
         bottomBar = { BottomBar(Screen.MY_PAGE, navController) }
@@ -101,24 +99,27 @@ fun MyScreen(
                 )
             }
 
-            Column(
+            LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(Color.Black)
-                    .verticalScroll(scrollState)
                     .padding(20.dp)
             ) {
-                MyPageList(
-                    labelText = stringResource(R.string.my_all),
-                    icon = painterResource(R.drawable.baseline_info_outline_24),
-                    iconText = stringResource(R.string.my_all_none)
-                )
+                item {
+                    MyPageItem(
+                        labelText = stringResource(R.string.my_all),
+                        icon = painterResource(R.drawable.baseline_info_outline_24),
+                        iconText = stringResource(R.string.my_all_none)
+                    )
+                }
 
-                MyPageList(
-                    labelText = stringResource(R.string.my_interest),
-                    icon = painterResource(R.drawable.baseline_info_outline_24),
-                    iconText = stringResource(R.string.my_interest_none)
-                )
+                item {
+                    MyPageItem(
+                        labelText = stringResource(R.string.my_interest),
+                        icon = painterResource(R.drawable.baseline_info_outline_24),
+                        iconText = stringResource(R.string.my_interest_none)
+                    )
+                }
             }
         }
     }
