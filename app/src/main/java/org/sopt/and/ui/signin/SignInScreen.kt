@@ -46,8 +46,7 @@ import org.sopt.and.ui.signup.SignUpViewModel
 fun SignInScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    signInViewModel: SignInViewModel,
-    signUpViewModel: SignUpViewModel
+    signInViewModel: SignInViewModel
 ) {
     var userId by remember {
         mutableStateOf("")
@@ -57,10 +56,9 @@ fun SignInScreen(
     }
     val snackbarMessage by signInViewModel.snackbarMessage.collectAsState()
 
-    val registeredInfo= signUpViewModel.userInfo
-
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
+    signInViewModel.initializePreferences(context)
 
     LaunchedEffect(snackbarMessage) {
         snackbarMessage?.let { message ->
@@ -71,8 +69,8 @@ fun SignInScreen(
             )
 
             if (result == SnackbarResult.ActionPerformed && message == context.getString(R.string.signin_success)) {
-                navController.navigate(Routes.My.route){
-                    popUpTo(Routes.SignIn.route){
+                navController.navigate(Routes.My.route) {
+                    popUpTo(Routes.SignIn.route) {
                         inclusive = true
                     }
                 }
@@ -95,7 +93,7 @@ fun SignInScreen(
         ) {
             IDTextField(
                 value = userId,
-                onValueChange = {userId = it},
+                onValueChange = { userId = it },
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = context.getString(R.string.signin_id)
             )
@@ -103,7 +101,7 @@ fun SignInScreen(
 
             PasswordTextField(
                 value = userPassWord,
-                onValueChange = {userPassWord = it},
+                onValueChange = { userPassWord = it },
                 placeholder = stringResource(R.string.signin_password)
             )
             Spacer(Modifier.height(30.dp))
@@ -111,7 +109,7 @@ fun SignInScreen(
             Button(
                 onClick = {
                     signInViewModel.updateUserInfo(userId, userPassWord)
-                    signInViewModel.performLogin(registeredInfo)
+                    signInViewModel.performLogin()
                 },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(

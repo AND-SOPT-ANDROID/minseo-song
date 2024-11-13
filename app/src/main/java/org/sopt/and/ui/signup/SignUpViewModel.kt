@@ -1,5 +1,7 @@
 package org.sopt.and.ui.signup
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -12,10 +14,19 @@ val PASSWORD_REGEX = Regex("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@\$!%*?&])[A-Za-z\\d@\
 
 
 class SignUpViewModel: ViewModel() {
+    var sharedPreferences: SharedPreferences? = null
     var userInfo by mutableStateOf(UserInfo("",""))
 
-    fun updateUserInfo(id: String, password: String){
-        userInfo = userInfo.copy(userId = id, userPassWord = password)
+    fun initializePreferences(context: Context){
+        sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+    }
+
+    fun saveUserInfo(id: String, password: String){
+        sharedPreferences?.edit()?.apply(){
+            putString("userId", id)
+            putString("userPassWord", password)
+            apply()
+        }
     }
 
     fun isAbleEmail(email: String): Boolean{

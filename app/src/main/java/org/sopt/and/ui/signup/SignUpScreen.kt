@@ -29,6 +29,7 @@ import org.sopt.and.R
 import org.sopt.and.component.InfoTextWithIcon
 import org.sopt.and.component.TextField.IDTextField
 import org.sopt.and.component.TextField.PasswordTextField
+import kotlin.math.sign
 
 
 @Composable
@@ -44,6 +45,7 @@ fun SignUpScreen(
         mutableStateOf("")
     }
     val context = LocalContext.current
+    signUpViewModel.initializePreferences(context)
 
     Column(
         modifier = modifier
@@ -98,7 +100,7 @@ fun SignUpScreen(
                 Button(
                     onClick = {
                         if (signUpViewModel.isAbleEmail(userId) && signUpViewModel.isAblePassword(userPassWord)){
-                            signUpViewModel.updateUserInfo(userId, userPassWord)
+                            signUpViewModel.saveUserInfo(userId, userPassWord)
                             navController.popBackStack()
                             Toast.makeText(context, (R.string.signup_success),Toast.LENGTH_SHORT).show()
                         }else{
