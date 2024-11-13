@@ -1,9 +1,8 @@
 package org.sopt.and.ui.signin
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,7 +12,6 @@ import org.sopt.and.api.ServicePool
 import org.sopt.and.api.dto.RequestLoginDto
 import org.sopt.and.api.dto.ResponseErrorDto
 import org.sopt.and.api.dto.ResponseLoginSuccessDto
-import org.sopt.and.model.UserInfo
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -21,19 +19,18 @@ import retrofit2.Response
 
 class SignInViewModel : ViewModel() {
     val loginService by lazy { ServicePool.loginService }
-    var userInfo by mutableStateOf(UserInfo("", ""))
-//    var sharedPreferences: SharedPreferences? = null
+    private var sharedPreferences: SharedPreferences? = null
 
     val _snackbarMessage = MutableStateFlow<String?>(null)
     val snackbarMessage: StateFlow<String?> get() = _snackbarMessage
 
-//    fun initializePreferences(context: Context) {
-//        sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
-//    }
-//
-//    fun updateUserInfo(id: String, password: String) {
-//        userInfo = UserInfo(userId = id, userPassWord = password)
-//    }
+    fun initializePreferences(context: Context) {
+        sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+    }
+
+    private fun saveToken(token: String) {
+        sharedPreferences?.edit()?.putString("token", token)?.apply()
+    }
 
     fun loginUser(
         username: String,
@@ -52,6 +49,8 @@ class SignInViewModel : ViewModel() {
                     val successBody = response.body()?.string()
                     val successDto =
                         Json.decodeFromString<ResponseLoginSuccessDto>(successBody ?: "")
+                    val token = successDto.result.token
+                    saveToken(token)
                     onSuccess("로그인 성공!")
                 } else {
                     val errorBody = response.errorBody()?.string()
@@ -75,19 +74,6 @@ class SignInViewModel : ViewModel() {
             }
         })
     }
-
-//    fun performLogin() {
-//        val savedUserId = sharedPreferences?.getString("userId", "") ?: ""
-//        val savedUserPassword = sharedPreferences?.getString("userPassWord", "") ?: ""
-//        val loginSuccess =
-//            (userInfo.userId == savedUserId && userInfo.userPassWord == savedUserPassword)
-//
-//        _snackbarMessage.value = if (loginSuccess) {
-//            "로그인 성공"
-//        } else {
-//            "로그인 실패"
-//        }
-//    }
 
     fun clearSnackbarMessage() {
         _snackbarMessage.value = null

@@ -1,5 +1,6 @@
 package org.sopt.and.ui.my
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -30,10 +32,11 @@ import org.sopt.and.ui.signin.SignInViewModel
 
 @Composable
 fun MyScreen(
-    navController: NavHostController,
-    signInViewModel: SignInViewModel
+    navController: NavHostController
 ) {
-    val userId = signInViewModel.userInfo.userId
+    val context = LocalContext.current
+    val sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+    val token = sharedPreferences.getString("token", "")
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -59,7 +62,7 @@ fun MyScreen(
                     contentScale = ContentScale.Fit
                 )
                 Text(
-                    text = stringResource(R.string.my_nickname, userId),
+                    text = stringResource(R.string.my_nickname, token!!),
                     color = Color.White,
                     modifier = Modifier.weight(1f)
                 )

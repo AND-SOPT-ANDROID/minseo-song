@@ -65,12 +65,7 @@ fun NavGraph(navController: NavHostController) {
                         signUpViewModel = signUpViewModel
                     )
                 }
-                composable(Routes.My.route) {
-                    MyScreen(
-                        navController,
-                        signInViewModel = signInViewModel
-                    )
-                }
+                composable(Routes.My.route) { MyScreen(navController) }
                 composable(Routes.Search.route) { SearchScreen(navController) }
                 composable(Routes.Home.route) { HomeScreen(navController) }
             }

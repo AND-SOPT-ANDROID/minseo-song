@@ -54,7 +54,8 @@ fun SignInScreen(
 
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
-//    signInViewModel.initializePreferences(context)
+
+    signInViewModel.initializePreferences(context)
 
     LaunchedEffect(snackbarMessage) {
         snackbarMessage?.let { message ->
