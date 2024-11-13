@@ -19,8 +19,9 @@
     <string name="signin_reset_password">비밀번호 재설정</string>
     <string name="signin_to_signup">회원가입</string>
     <string name="signin_dash">|</string>
-    <string name="signin_success">로그인 성공</string>
+    <string name="signin_success">로그인 성공!</string>
     <string name="signin_fail">로그인 실패</string>
+
 
     // My 화면
     <string name="my_text1">첫 결제 시 첫 달 100원!</string>
@@ -43,7 +44,6 @@
     <string name="kids">키즈</string>
     <string name="film_plus">영화플러스</string>
     <string name="image_counter">%1$d / %2$d</string>
-
     <string name="home_editor_recommend">믿고 보는 웨이브 에디터 추천작</string>
     <string name="home_today_top_20">오늘의 TOP 20</string>
 

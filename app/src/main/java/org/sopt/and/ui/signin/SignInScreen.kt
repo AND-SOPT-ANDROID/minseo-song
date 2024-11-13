@@ -54,7 +54,7 @@ fun SignInScreen(
 
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
-    signInViewModel.initializePreferences(context)
+//    signInViewModel.initializePreferences(context)
 
     LaunchedEffect(snackbarMessage) {
         snackbarMessage?.let { message ->
@@ -104,8 +104,18 @@ fun SignInScreen(
 
             Button(
                 onClick = {
-                    signInViewModel.updateUserInfo(userId, userPassWord)
-                    signInViewModel.performLogin()
+//                    signInViewModel.updateUserInfo(userId, userPassWord)
+//                    signInViewModel.performLogin()
+                    signInViewModel.loginUser(
+                        username = userId,
+                        password = userPassWord,
+                        onSuccess = {tokenMessage ->
+                            signInViewModel._snackbarMessage.value = tokenMessage
+                        },
+                        onFailure = {erorMessage ->
+                            signInViewModel._snackbarMessage.value = erorMessage
+                        }
+                    )
                 },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
