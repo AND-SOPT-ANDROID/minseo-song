@@ -34,7 +34,7 @@ fun MyPageItem(
             .padding(bottom = 80.dp)
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
-    ){
+    ) {
         Image(
             painter = icon,
             contentDescription = "",

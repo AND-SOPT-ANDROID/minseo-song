@@ -2,11 +2,7 @@ package org.sopt.and.ui.signup
 
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import org.sopt.and.model.UserInfo
 
 
 class SignUpViewModel: ViewModel() {
@@ -15,7 +11,6 @@ class SignUpViewModel: ViewModel() {
     val PASSWORD_REGEX = Regex("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@\$!%*?&])[A-Za-z\\d@\$!%*?&]{$PASSWORD_MIN_LENGTH,$PASSWORD_MAX_LENGTH}\$")
 
     var sharedPreferences: SharedPreferences? = null
-    var userInfo by mutableStateOf(UserInfo("",""))
 
     fun initializePreferences(context: Context){
         sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)

@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,7 +24,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import org.sopt.and.R
-import org.sopt.and.component.bar.BottomBar
 import org.sopt.and.component.BuyTextButton
 import org.sopt.and.component.MyPageItem
 import org.sopt.and.ui.signin.SignInViewModel
@@ -39,7 +37,7 @@ fun MyScreen(
 
     Column(
         modifier = Modifier.fillMaxSize()
-    ){
+    ) {
         Column(
             modifier = Modifier
                 .background(Color.DarkGray)

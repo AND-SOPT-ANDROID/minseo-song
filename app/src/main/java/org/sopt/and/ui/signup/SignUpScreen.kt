@@ -48,7 +48,7 @@ fun SignUpScreen(
 
     Column(
         modifier = modifier
-    ){
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -58,7 +58,7 @@ fun SignUpScreen(
                 modifier = Modifier
                     .padding(20.dp)
                     .align(Alignment.TopStart)
-            ){
+            ) {
                 Text(
                     text = stringResource(R.string.signup_text),
                     color = Color.Gray
@@ -67,7 +67,7 @@ fun SignUpScreen(
 
                 IDTextField(
                     value = userId,
-                    onValueChange = {userId = it},
+                    onValueChange = { userId = it },
                     modifier = Modifier.fillMaxWidth(),
                     placeholder = context.getString(R.string.signup_id)
                 )
@@ -95,15 +95,20 @@ fun SignUpScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
-            ){
+            ) {
                 Button(
                     onClick = {
-                        if (signUpViewModel.isAbleEmail(userId) && signUpViewModel.isAblePassword(userPassWord)){
+                        if (signUpViewModel.isAbleEmail(userId) && signUpViewModel.isAblePassword(
+                                userPassWord
+                            )
+                        ) {
                             signUpViewModel.saveUserInfo(userId, userPassWord)
                             navController.popBackStack()
-                            Toast.makeText(context, (R.string.signup_success),Toast.LENGTH_SHORT).show()
-                        }else{
-                            Toast.makeText(context, (R.string.signup_fail),Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, (R.string.signup_success), Toast.LENGTH_SHORT)
+                                .show()
+                        } else {
+                            Toast.makeText(context, (R.string.signup_fail), Toast.LENGTH_SHORT)
+                                .show()
                         }
                     },
                     modifier = Modifier
