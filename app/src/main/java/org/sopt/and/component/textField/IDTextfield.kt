@@ -1,4 +1,4 @@
-package org.sopt.and.component.TextField
+package org.sopt.and.component.textField
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text

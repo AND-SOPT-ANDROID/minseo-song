@@ -1,4 +1,4 @@
-package org.sopt.and.component.Bar
+package org.sopt.and.component.bar
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement

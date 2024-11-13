@@ -25,7 +25,7 @@
     <string name="my_text1">첫 결제 시 첫 달 100원!</string>
     <string name="my_text2">현재 보유하신 이용권이 없습니다.</string>
     <string name="my_nickname">%1$s님</string>
-    <string name="my_buy">구매하기 ></string>
+    <string name="my_buy">구매하기</string>
     <string name="my_all">전체 시청내역</string>
     <string name="my_all_none">시청내역이 없어요.</string>
     <string name="my_interest">관심 프로그램</string>

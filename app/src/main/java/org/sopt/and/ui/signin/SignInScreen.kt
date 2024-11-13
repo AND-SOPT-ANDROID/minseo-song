@@ -23,41 +23,38 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import org.sopt.and.R
-import org.sopt.and.component.TextField.IDTextField
-import org.sopt.and.component.TextField.PasswordTextField
+import org.sopt.and.component.textField.IDTextField
+import org.sopt.and.component.textField.PasswordTextField
 import org.sopt.and.navigate.Routes
-import org.sopt.and.ui.signup.SignUpViewModel
 
 @Composable
 fun SignInScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    signInViewModel: SignInViewModel,
-    signUpViewModel: SignUpViewModel
+    signInViewModel: SignInViewModel
 ) {
-
-    val userId by signInViewModel::userId
-    val userPassword by signInViewModel::userPassword
-    val passwordVisible by signInViewModel::passwordVisible
+    var userId by remember {
+        mutableStateOf("")
+    }
+    var userPassWord by remember {
+        mutableStateOf("")
+    }
     val snackbarMessage by signInViewModel.snackbarMessage.collectAsState()
-
-    val registeredId = signUpViewModel.userId
-    val registeredPassword = signUpViewModel.userPassword
 
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
+    signInViewModel.initializePreferences(context)
 
     LaunchedEffect(snackbarMessage) {
         snackbarMessage?.let { message ->
@@ -68,8 +65,8 @@ fun SignInScreen(
             )
 
             if (result == SnackbarResult.ActionPerformed && message == context.getString(R.string.signin_success)) {
-                navController.navigate(Routes.My.route){
-                    popUpTo(Routes.SignIn.route){
+                navController.navigate(Routes.My.route) {
+                    popUpTo(Routes.SignIn.route) {
                         inclusive = true
                     }
                 }
@@ -92,26 +89,23 @@ fun SignInScreen(
         ) {
             IDTextField(
                 value = userId,
-                onValueChange = signInViewModel::updateUserId,
+                onValueChange = { userId = it },
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = context.getString(R.string.signin_id)
             )
             Spacer(Modifier.height(5.dp))
 
             PasswordTextField(
-                value = userPassword,
-                onValueChange = signInViewModel::updateUserPassword,
-                placeholder = stringResource(R.string.signin_password),
-                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                onTrailingIconClick = {
-                    signInViewModel.togglePasswordVisibility()
-                }
+                value = userPassWord,
+                onValueChange = { userPassWord = it },
+                placeholder = stringResource(R.string.signin_password)
             )
             Spacer(Modifier.height(30.dp))
 
             Button(
                 onClick = {
-                    signInViewModel.performLogin(registeredId, registeredPassword)
+                    signInViewModel.updateUserInfo(userId, userPassWord)
+                    signInViewModel.performLogin()
                 },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(

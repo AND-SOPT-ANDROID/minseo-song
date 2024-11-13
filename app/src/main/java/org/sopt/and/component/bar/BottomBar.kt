@@ -1,4 +1,4 @@
-package org.sopt.and.component.Bar
+package org.sopt.and.component.bar
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -24,12 +24,12 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import org.sopt.and.navigate.Screen
+import org.sopt.and.navigate.Routes
 import org.sopt.and.navigate.ScreenTab
 
 @Composable
 fun BottomBar(
-    selected: Screen,
+    selected: ScreenTab?,
     navController: NavHostController
 ) {
     val imageSize: Dp = 25.dp
@@ -48,14 +48,19 @@ fun BottomBar(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                ScreenTab.values().forEach { tab ->
-                    val isSelected = (tab.name == selected.name)
+                ScreenTab.entries.forEach { tab ->
+                    val isSelected = (tab == selected)
                     val image = if (isSelected) tab.selectedImage else tab.unselectedImage
                     val color = if (isSelected) tab.selectedColor else tab.unselectedColor
 
                     BottomTab(
-                        navController = navController,
-                        route = tab.route,
+                        onClick = {
+                            navController.navigate(tab.route){
+                                popUpTo(tab.route){
+                                    inclusive = true
+                                }
+                            }
+                        },
                         image = image,
                         textColor = color,
                         imageSize = imageSize,
@@ -70,8 +75,7 @@ fun BottomBar(
 
 @Composable
 fun BottomTab(
-    navController: NavHostController,
-    route: String,
+    onClick: () -> Unit,
     image: Int,
     textColor: Int,
     imageSize: Dp,
@@ -83,11 +87,7 @@ fun BottomTab(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .clickable {
-                navController.navigate(route) {
-                    popUpTo(route) {
-                        inclusive = true
-                    }
-                }
+                onClick()
             }
             .size(80.dp)
     ) {
