@@ -9,23 +9,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
-import org.sopt.and.component.Bar.BottomBar
-import org.sopt.and.navigate.Screen
+import org.sopt.and.component.bar.BottomBar
 
 @Composable
 fun SearchScreen(
-    navController: NavHostController,
-    modifier: Modifier = Modifier
+    navController: NavHostController
 ) {
-    Scaffold(
-        bottomBar = { BottomBar(Screen.SEARCH, navController) }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black)
-                .padding(paddingValues)
-        ) {
-        }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black)
+    ) {
     }
 }

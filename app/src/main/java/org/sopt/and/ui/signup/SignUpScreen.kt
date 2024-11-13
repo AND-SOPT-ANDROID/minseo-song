@@ -27,9 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import org.sopt.and.R
 import org.sopt.and.component.InfoTextWithIcon
-import org.sopt.and.component.TextField.IDTextField
-import org.sopt.and.component.TextField.PasswordTextField
-import kotlin.math.sign
+import org.sopt.and.component.textField.IDTextField
+import org.sopt.and.component.textField.PasswordTextField
 
 
 @Composable

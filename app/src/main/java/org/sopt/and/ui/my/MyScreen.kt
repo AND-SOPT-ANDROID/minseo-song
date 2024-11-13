@@ -25,10 +25,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import org.sopt.and.R
-import org.sopt.and.component.Bar.BottomBar
+import org.sopt.and.component.bar.BottomBar
 import org.sopt.and.component.BuyTextButton
 import org.sopt.and.component.MyPageItem
-import org.sopt.and.navigate.Screen
 import org.sopt.and.ui.signin.SignInViewModel
 
 @Composable
@@ -38,89 +37,85 @@ fun MyScreen(
 ) {
     val userId = signInViewModel.userInfo.userId
 
-    Scaffold(
-        bottomBar = { BottomBar(Screen.MY_PAGE, navController) }
-    ) { paddingValues ->
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ){
         Column(
             modifier = Modifier
-                .padding(paddingValues)
+                .background(Color.DarkGray)
+                .padding(20.dp)
         ) {
-            Column(
+            Row(
                 modifier = Modifier
-                    .background(Color.DarkGray)
-                    .padding(20.dp)
+                    .padding(bottom = 20.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(
+                Image(
+                    painter = painterResource(R.drawable.img_profile_select),
+                    contentDescription = "",
                     modifier = Modifier
-                        .padding(bottom = 20.dp)
-                        .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Image(
-                        painter = painterResource(R.drawable.img_profile_select),
-                        contentDescription = "",
-                        modifier = Modifier
-                            .padding(end = 20.dp)
-                            .size(60.dp)
-                            .clip(CircleShape),
-                        contentScale = ContentScale.Fit
-                    )
-                    Text(
-                        text = stringResource(R.string.my_nickname, userId),
-                        color = Color.White,
-                        modifier = Modifier.weight(1f)
-                    )
-                    Image(
-                        painter = painterResource(R.drawable.outline_notifications_24),
-                        contentDescription = "",
-                        modifier = Modifier.padding(end = 20.dp)
-                    )
-
-                    Image(
-                        painter = painterResource(R.drawable.outline_settings_24),
-                        contentDescription = ""
-                    )
-
-                }
-
-                BuyTextButton(
-                    labelText = stringResource(R.string.my_text1),
-                    onClick = {
-                        TODO("결제창으로 넘어가기")
-                    }
+                        .padding(end = 20.dp)
+                        .size(60.dp)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Fit
                 )
-                Spacer(Modifier.height(20.dp))
+                Text(
+                    text = stringResource(R.string.my_nickname, userId),
+                    color = Color.White,
+                    modifier = Modifier.weight(1f)
+                )
+                Image(
+                    painter = painterResource(R.drawable.outline_notifications_24),
+                    contentDescription = "",
+                    modifier = Modifier.padding(end = 20.dp)
+                )
 
-                BuyTextButton(
-                    labelText = stringResource(R.string.my_text2),
-                    onClick = {
-                        TODO("결제창으로 넘어가기")
-                    }
+                Image(
+                    painter = painterResource(R.drawable.outline_settings_24),
+                    contentDescription = ""
+                )
+
+            }
+
+            BuyTextButton(
+                labelText = stringResource(R.string.my_text1),
+                onClick = {
+                    TODO("결제창으로 넘어가기")
+                }
+            )
+            Spacer(Modifier.height(20.dp))
+
+            BuyTextButton(
+                labelText = stringResource(R.string.my_text2),
+                onClick = {
+                    TODO("결제창으로 넘어가기")
+                }
+            )
+        }
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black)
+                .padding(20.dp)
+        ) {
+            item {
+                MyPageItem(
+                    labelText = stringResource(R.string.my_all),
+                    icon = painterResource(R.drawable.baseline_info_outline_24),
+                    iconText = stringResource(R.string.my_all_none)
                 )
             }
 
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Black)
-                    .padding(20.dp)
-            ) {
-                item {
-                    MyPageItem(
-                        labelText = stringResource(R.string.my_all),
-                        icon = painterResource(R.drawable.baseline_info_outline_24),
-                        iconText = stringResource(R.string.my_all_none)
-                    )
-                }
-
-                item {
-                    MyPageItem(
-                        labelText = stringResource(R.string.my_interest),
-                        icon = painterResource(R.drawable.baseline_info_outline_24),
-                        iconText = stringResource(R.string.my_interest_none)
-                    )
-                }
+            item {
+                MyPageItem(
+                    labelText = stringResource(R.string.my_interest),
+                    icon = painterResource(R.drawable.baseline_info_outline_24),
+                    iconText = stringResource(R.string.my_interest_none)
+                )
             }
         }
     }
 }
+

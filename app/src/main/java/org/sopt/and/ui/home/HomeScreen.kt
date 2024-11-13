@@ -17,7 +17,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,11 +38,8 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.yield
 import org.sopt.and.R
-import org.sopt.and.component.Bar.BottomBar
-import org.sopt.and.component.Bar.TopBar
-import org.sopt.and.navigate.Screen
+import org.sopt.and.component.bar.TopBar
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -59,177 +55,175 @@ fun HomeScreen(
 
     val pagerState = rememberPagerState(pageCount = { hometopimages.size })
 
-    LaunchedEffect(pagerState){
-        while(true){
-            yield()
+    LaunchedEffect(pagerState) {
+        while (true) {
             delay(3000)
-            val nextPage = (pagerState.currentPage+1)%hometopimages.size
+            val nextPage = (pagerState.currentPage + 1) % hometopimages.size
             pagerState.animateScrollToPage(nextPage)
         }
     }
 
-    Scaffold(
-        bottomBar = { BottomBar(Screen.HOME, navController) }
-    ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black)
-                .padding(paddingValues)
-        ) {
-            item{
-                TopBar()
-            }
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black)
+    ) {
+        item {
+            TopBar()
+        }
 
-            stickyHeader {
-                LazyRow(
-                    contentPadding = PaddingValues(horizontal = 20.dp),
-                    horizontalArrangement = Arrangement.spacedBy(20.dp)
-                ) {
-                    items(
-                        count = homeCategory.size,
-                        key = { item -> homeCategory[item] }
-                    ) { category ->
-                        Text(
-                            text = stringResource(homeCategory[category]),
-                            color = Color.Gray
-                        )
-                    }
+        stickyHeader {
+            LazyRow(
+                contentPadding = PaddingValues(horizontal = 20.dp),
+                horizontalArrangement = Arrangement.spacedBy(20.dp)
+            ) {
+                items(
+                    count = homeCategory.size,
+                    key = { item -> homeCategory[item] }
+                ) { category ->
+                    Text(
+                        text = stringResource(homeCategory[category]),
+                        color = Color.Gray
+                    )
                 }
             }
+        }
 
-            item {
-                HorizontalPager(
-                    state = pagerState,
-                    contentPadding = PaddingValues(horizontal = 20.dp),
-                    modifier = Modifier.padding(vertical = 20.dp)
-                ) { index ->
-                    Box(
+        item {
+            HorizontalPager(
+                state = pagerState,
+                contentPadding = PaddingValues(horizontal = 20.dp),
+                modifier = Modifier.padding(vertical = 20.dp)
+            ) { index ->
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(8.dp))
+                        .size(width = 360.dp, height = 480.dp)
+                ) {
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(hometopimages[index].image)
+                            .crossfade(true)
+                            .build(),
+                        contentDescription = "",
+                        contentScale = ContentScale.Crop,
                         modifier = Modifier
-                            .clip(RoundedCornerShape(8.dp))
-                            .size(width = 360.dp, height = 480.dp)
-                    ) {
-                        AsyncImage(
-                            model = ImageRequest.Builder(LocalContext.current)
-                                .data(hometopimages[index].image)
-                                .crossfade(true)
-                                .build(),
-                            contentDescription = "",
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .fillMaxSize()
-                        )
+                            .fillMaxSize()
+                    )
 
-                        Text(
-                            text = stringResource(R.string.image_counter, index+1, hometopimages.size),
-                            color = Color.White,
-                            fontSize = 14.sp,
-                            modifier = Modifier
-                                .align(Alignment.BottomEnd)
-                                .padding(8.dp)
-                                .background(
-                                    color = Color.Black.copy(alpha = 0.7f),
-                                    shape = RoundedCornerShape(50.dp)
-                                )
-                                .padding(horizontal = 8.dp, vertical = 4.dp)
-                        )
-                    }
-                }
-            }
-
-            item {
-                Column(
-                    modifier = Modifier.padding(top = 15.dp)
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = stringResource(R.string.home_editor_recommend),
-                            fontSize = 20.sp,
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(start = 20.dp, top = 15.dp, bottom = 15.dp)
-                        )
-
-                        Image(
-                            painter = painterResource(R.drawable.baseline_navigate_next_24),
-                            contentDescription = "",
-                            modifier = Modifier.size(35.dp)
-                        )
-                    }
-
-                    LazyRow(
-                        contentPadding = PaddingValues(horizontal = 20.dp),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp),
-                        modifier = Modifier.padding(bottom = 20.dp)
-                    ) {
-                        items(
-                            count = homerecommendimages.size,
-                            key = {item -> homerecommendimages[item].image}
-                        ){index ->
-                            AsyncImage(
-                                model = ImageRequest.Builder(LocalContext.current)
-                                    .data(homerecommendimages[index].image)
-                                    .crossfade(true)
-                                    .build(),
-                                contentDescription = "",
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(8.dp))
-                                    .size(160.dp, 240.dp)
+                    Text(
+                        text = stringResource(
+                            R.string.image_counter,
+                            index + 1,
+                            hometopimages.size
+                        ),
+                        color = Color.White,
+                        fontSize = 14.sp,
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(8.dp)
+                            .background(
+                                color = Color.Black.copy(alpha = 0.7f),
+                                shape = RoundedCornerShape(50.dp)
                             )
-                        }
-                    }
+                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                    )
                 }
             }
+        }
 
-            item {
-                Column(
-                    modifier = Modifier.padding(top = 15.dp)
+        item {
+            Column(
+                modifier = Modifier.padding(top = 15.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = stringResource(R.string.home_today_top_20),
+                        text = stringResource(R.string.home_editor_recommend),
                         fontSize = 20.sp,
                         color = Color.White,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(start = 20.dp, top = 15.dp, bottom = 15.dp)
                     )
 
-                    LazyRow(
-                        contentPadding = PaddingValues(horizontal = 20.dp),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp),
-                        modifier = Modifier.padding(bottom = 20.dp)
-                    ) {
-                        items(
-                            count = hometop20images.size,
-                            key = {item -> hometop20images[item].image}
-                        ){index ->
-                            Box(
-                                contentAlignment = Alignment.BottomStart
-                            ){
-                                AsyncImage(
-                                    model = ImageRequest.Builder(LocalContext.current)
-                                        .data(hometop20images[index].image)
-                                        .crossfade(true)
-                                        .build(),
-                                    contentDescription = "",
-                                    contentScale = ContentScale.Crop,
-                                    modifier = Modifier
-                                        .padding(bottom = 35.dp)
-                                        .clip(RoundedCornerShape(8.dp))
-                                        .size(160.dp, 240.dp)
-                                )
-                                Text(
-                                    text = (index+1).toString(),
-                                    fontSize = 60.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color.White,
-                                    modifier = Modifier.padding(start = 8.dp)
-                                )
-                            }
+                    Image(
+                        painter = painterResource(R.drawable.baseline_navigate_next_24),
+                        contentDescription = "",
+                        modifier = Modifier.size(35.dp)
+                    )
+                }
+
+                LazyRow(
+                    contentPadding = PaddingValues(horizontal = 20.dp),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    modifier = Modifier.padding(bottom = 20.dp)
+                ) {
+                    items(
+                        count = homerecommendimages.size,
+                        key = { index -> homerecommendimages[index].image }
+                    ) { index ->
+                        AsyncImage(
+                            model = ImageRequest.Builder(LocalContext.current)
+                                .data(homerecommendimages[index].image)
+                                .crossfade(true)
+                                .build(),
+                            contentDescription = "",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(8.dp))
+                                .size(160.dp, 240.dp)
+                        )
+                    }
+                }
+            }
+        }
+
+        item {
+            Column(
+                modifier = Modifier.padding(top = 15.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.home_today_top_20),
+                    fontSize = 20.sp,
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(start = 20.dp, top = 15.dp, bottom = 15.dp)
+                )
+
+                LazyRow(
+                    contentPadding = PaddingValues(horizontal = 20.dp),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    modifier = Modifier.padding(bottom = 20.dp)
+                ) {
+                    items(
+                        count = hometop20images.size,
+                        key = { index -> hometop20images[index].image }
+                    ) { index ->
+                        Box(
+                            contentAlignment = Alignment.BottomStart
+                        ) {
+                            AsyncImage(
+                                model = ImageRequest.Builder(LocalContext.current)
+                                    .data(hometop20images[index].image)
+                                    .crossfade(true)
+                                    .build(),
+                                contentDescription = "",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .padding(bottom = 35.dp)
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .size(160.dp, 240.dp)
+                            )
+                            Text(
+                                text = (index + 1).toString(),
+                                fontSize = 60.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White,
+                                modifier = Modifier.padding(start = 8.dp)
+                            )
                         }
                     }
                 }

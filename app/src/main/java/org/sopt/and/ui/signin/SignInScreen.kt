@@ -30,17 +30,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import org.sopt.and.R
-import org.sopt.and.component.TextField.IDTextField
-import org.sopt.and.component.TextField.PasswordTextField
+import org.sopt.and.component.textField.IDTextField
+import org.sopt.and.component.textField.PasswordTextField
 import org.sopt.and.navigate.Routes
-import org.sopt.and.ui.signup.SignUpViewModel
 
 @Composable
 fun SignInScreen(
