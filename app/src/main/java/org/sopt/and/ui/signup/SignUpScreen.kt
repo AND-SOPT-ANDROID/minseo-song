@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
@@ -43,8 +44,11 @@ fun SignUpScreen(
     var userPassWord by remember {
         mutableStateOf("")
     }
+    var userHobby by remember {
+        mutableStateOf("")
+    }
     val context = LocalContext.current
-    signUpViewModel.initializePreferences(context)
+//    signUpViewModel.initializePreferences(context)
 
     Column(
         modifier = modifier
@@ -88,6 +92,13 @@ fun SignUpScreen(
                 InfoTextWithIcon(
                     text = stringResource(R.string.signup_password_explain)
                 )
+
+                IDTextField(
+                    value = userHobby,
+                    onValueChange = { userHobby = it },
+                    modifier = Modifier.fillMaxWidth(),
+                    placeholder = context.getString(R.string.signup_hobby)
+                )
             }
 
 
@@ -98,18 +109,23 @@ fun SignUpScreen(
             ) {
                 Button(
                     onClick = {
-                        if (signUpViewModel.isAbleEmail(userId) && signUpViewModel.isAblePassword(
-                                userPassWord
-                            )
-                        ) {
-                            signUpViewModel.saveUserInfo(userId, userPassWord)
-                            navController.popBackStack()
-                            Toast.makeText(context, (R.string.signup_success), Toast.LENGTH_SHORT)
-                                .show()
-                        } else {
-                            Toast.makeText(context, (R.string.signup_fail), Toast.LENGTH_SHORT)
-                                .show()
-                        }
+                        signUpViewModel.signUpUser(
+                            username = userId,
+                            password = userPassWord,
+                            hobby = userHobby,
+                            onSuccess = {
+                                navController.popBackStack()
+                                Toast.makeText(
+                                    context,
+                                    R.string.signup_success,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            },
+                            onFailure = { errorMessage ->
+                                Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+                            }
+                        )
+
                     },
                     modifier = Modifier
                         .fillMaxWidth()
