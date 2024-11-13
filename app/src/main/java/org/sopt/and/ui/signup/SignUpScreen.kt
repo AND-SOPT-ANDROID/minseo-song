@@ -47,7 +47,6 @@ fun SignUpScreen(
         mutableStateOf("")
     }
     val context = LocalContext.current
-//    signUpViewModel.initializePreferences(context)
 
     Column(
         modifier = modifier

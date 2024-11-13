@@ -110,10 +110,10 @@ fun SignInScreen(
                     signInViewModel.loginUser(
                         username = userId,
                         password = userPassWord,
-                        onSuccess = {tokenMessage ->
+                        onSuccess = { tokenMessage ->
                             signInViewModel._snackbarMessage.value = tokenMessage
                         },
-                        onFailure = {erorMessage ->
+                        onFailure = { erorMessage ->
                             signInViewModel._snackbarMessage.value = erorMessage
                         }
                     )

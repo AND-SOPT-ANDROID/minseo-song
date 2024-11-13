@@ -16,7 +16,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MyViewModel(): ViewModel() {
+class MyViewModel() : ViewModel() {
     private val hobbyService = ServicePool.hobbyService
 
     private val _hobby = MutableStateFlow<String>("")
@@ -33,7 +33,8 @@ class MyViewModel(): ViewModel() {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     val successBody = response.body()?.string()
-                    val successDto = Json.decodeFromString<ResponseHobbySuccessDto>(successBody ?: "")
+                    val successDto =
+                        Json.decodeFromString<ResponseHobbySuccessDto>(successBody ?: "")
                     viewModelScope.launch {
                         _hobby.emit(successDto.result.hobby)
                     }
