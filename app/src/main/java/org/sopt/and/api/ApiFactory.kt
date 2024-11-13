@@ -6,6 +6,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.sopt.and.BuildConfig
+import org.sopt.and.api.service.HobbyService
 import org.sopt.and.api.service.LoginService
 import org.sopt.and.api.service.UserService
 import retrofit2.Retrofit
@@ -35,4 +36,5 @@ object ApiFactory {
 object ServicePool {
     val userService = ApiFactory.create<UserService>()
     val loginService = ApiFactory.create<LoginService>()
+    val hobbyService = ApiFactory.create<HobbyService>()
 }

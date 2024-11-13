@@ -15,6 +15,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,15 +32,22 @@ import androidx.navigation.NavHostController
 import org.sopt.and.R
 import org.sopt.and.component.BuyTextButton
 import org.sopt.and.component.MyPageItem
-import org.sopt.and.ui.signin.SignInViewModel
 
 @Composable
 fun MyScreen(
-    navController: NavHostController
+    navController: NavHostController,
+    myViewModel: MyViewModel
 ) {
     val context = LocalContext.current
-    val sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
-    val token = sharedPreferences.getString("token", "")
+    val sharedPreferences = remember {
+        context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+    }
+
+    LaunchedEffect(Unit) {
+        myViewModel.getUserHobby(sharedPreferences)
+    }
+
+    val hobby by myViewModel.hobby.collectAsState()
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -62,7 +73,7 @@ fun MyScreen(
                     contentScale = ContentScale.Fit
                 )
                 Text(
-                    text = stringResource(R.string.my_nickname, token!!),
+                    text = stringResource(R.string.my_nickname, hobby),
                     color = Color.White,
                     modifier = Modifier.weight(1f)
                 )

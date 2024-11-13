@@ -17,6 +17,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import org.sopt.and.component.bar.BottomBar
 import org.sopt.and.ui.home.HomeScreen
 import org.sopt.and.ui.my.MyScreen
+import org.sopt.and.ui.my.MyViewModel
 import org.sopt.and.ui.search.SearchScreen
 import org.sopt.and.ui.signin.SignInScreen
 import org.sopt.and.ui.signin.SignInViewModel
@@ -27,6 +28,7 @@ import org.sopt.and.ui.signup.SignUpViewModel
 fun NavGraph(navController: NavHostController) {
     val signUpViewModel: SignUpViewModel = viewModel()
     val signInViewModel: SignInViewModel = viewModel()
+    val myViewModel: MyViewModel = viewModel()
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -65,7 +67,12 @@ fun NavGraph(navController: NavHostController) {
                         signUpViewModel = signUpViewModel
                     )
                 }
-                composable(Routes.My.route) { MyScreen(navController) }
+                composable(Routes.My.route) {
+                    MyScreen(
+                        navController,
+                        myViewModel = myViewModel
+                    )
+                }
                 composable(Routes.Search.route) { SearchScreen(navController) }
                 composable(Routes.Home.route) { HomeScreen(navController) }
             }
