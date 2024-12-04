@@ -2,27 +2,22 @@ package org.sopt.and.ui.signin
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.serialization.json.Json
-import okhttp3.ResponseBody
+import kotlinx.coroutines.launch
 import org.sopt.and.api.ServicePool
 import org.sopt.and.api.dto.RequestLoginDto
-import org.sopt.and.api.dto.ResponseErrorDto
-import org.sopt.and.api.dto.ResponseLoginSuccessDto
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 
 class SignInViewModel : ViewModel() {
-    val loginService by lazy { ServicePool.loginService }
-    private var sharedPreferences: SharedPreferences? = null
+    private val loginService = ServicePool.loginService
 
-    val _snackbarMessage = MutableStateFlow<String?>(null)
+    private val _snackbarMessage = MutableStateFlow<String?>(null)
     val snackbarMessage: StateFlow<String?> get() = _snackbarMessage
+
+    private var sharedPreferences: SharedPreferences? = null
 
     fun initializePreferences(context: Context) {
         sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
@@ -32,47 +27,17 @@ class SignInViewModel : ViewModel() {
         sharedPreferences?.edit()?.putString("token", token)?.apply()
     }
 
-    fun loginUser(
-        username: String,
-        password: String,
-        onSuccess: (String) -> Unit,
-        onFailure: (String) -> Unit
-    ) {
-        val requestLoginDto = RequestLoginDto(username = username, password = password)
-
-        loginService.postLogin(requestLoginDto).enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(
-                call: Call<ResponseBody>,
-                response: Response<ResponseBody>
-            ) {
-                if (response.isSuccessful) {
-                    val successBody = response.body()?.string()
-                    val successDto =
-                        Json.decodeFromString<ResponseLoginSuccessDto>(successBody ?: "")
-                    val token = successDto.result.token
-                    saveToken(token)
-                    onSuccess("로그인 성공!")
-                } else {
-                    val errorBody = response.errorBody()?.string()
-                    val errorDto = errorBody?.let { Json.decodeFromString<ResponseErrorDto>(it) }
-                    val errorMessage = when (response.code()) {
-                        400 -> when (errorDto?.code) {
-                            "02" -> "로그인 정보가 올바르지 않습니다."
-                            else -> "잘못된 요청입니다."
-                        }
-
-                        403 -> "비밀번호가 틀렸습니다."
-                        else -> "알 수 없는 오류가 발생했습니다."
-                    }
-                    onFailure(errorMessage)
-                }
+    fun loginUser(username: String, password: String) {
+        viewModelScope.launch {
+            try {
+                val response = loginService.postLogin(RequestLoginDto(username, password))
+                val token = response.result.token
+                saveToken(token)
+                _snackbarMessage.value = "로그인 성공!"
+            } catch (e: Exception) {
+                _snackbarMessage.value = "오류 발생: ${e.message}"
             }
-
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                onFailure("네트워크 오류: ${t.message}")
-                Log.e("SignInViewModel", "Failure: ${t.message}")
-            }
-        })
+        }
     }
 
     fun clearSnackbarMessage() {

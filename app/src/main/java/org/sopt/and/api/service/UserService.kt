@@ -1,14 +1,14 @@
 package org.sopt.and.api.service
 
-import okhttp3.ResponseBody
+import org.sopt.and.api.dto.BaseResponse
 import org.sopt.and.api.dto.RequestUserDto
-import retrofit2.Call
+import org.sopt.and.api.dto.ResponseUserDto
 import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface UserService {
     @POST("/user")
-    fun postUser(
+    suspend fun postUser(
         @Body requestUser: RequestUserDto
-    ): Call<ResponseBody>
+    ): BaseResponse<ResponseUserDto>
 }

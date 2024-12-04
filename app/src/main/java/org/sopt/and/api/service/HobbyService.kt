@@ -1,13 +1,13 @@
 package org.sopt.and.api.service
 
-import okhttp3.ResponseBody
-import retrofit2.Call
+import org.sopt.and.api.dto.BaseResponse
+import org.sopt.and.api.dto.ResponseHobbyDto
 import retrofit2.http.GET
 import retrofit2.http.Header
 
 interface HobbyService {
     @GET("/user/my-hobby")
-    fun getMyHobby(
+    suspend fun getMyHobby(
         @Header("token") token: String
-    ): Call<ResponseBody>
+    ): BaseResponse<ResponseHobbyDto>
 }

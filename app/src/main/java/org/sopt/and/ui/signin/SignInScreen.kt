@@ -105,17 +105,9 @@ fun SignInScreen(
 
             Button(
                 onClick = {
-//                    signInViewModel.updateUserInfo(userId, userPassWord)
-//                    signInViewModel.performLogin()
                     signInViewModel.loginUser(
                         username = userId,
-                        password = userPassWord,
-                        onSuccess = { tokenMessage ->
-                            signInViewModel._snackbarMessage.value = tokenMessage
-                        },
-                        onFailure = { erorMessage ->
-                            signInViewModel._snackbarMessage.value = erorMessage
-                        }
+                        password = userPassWord
                     )
                 },
                 modifier = Modifier.fillMaxWidth(),

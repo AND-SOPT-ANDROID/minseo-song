@@ -13,6 +13,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,6 +25,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import org.sopt.and.R
 import org.sopt.and.component.InfoTextWithIcon
@@ -47,6 +49,7 @@ fun SignUpScreen(
         mutableStateOf("")
     }
     val context = LocalContext.current
+    val errorMessage by signUpViewModel.errorMessage.collectAsStateWithLifecycle()
 
     Column(
         modifier = modifier
@@ -118,9 +121,6 @@ fun SignUpScreen(
                                     R.string.signup_success,
                                     Toast.LENGTH_SHORT
                                 ).show()
-                            },
-                            onFailure = { errorMessage ->
-                                Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
                             }
                         )
 
@@ -137,6 +137,11 @@ fun SignUpScreen(
                         text = stringResource(R.string.signup_button),
                         color = Color.White
                     )
+                }
+
+                errorMessage?.let {
+                    Spacer(Modifier.height(10.dp))
+                    Text(text = it, color = Color.Red)
                 }
             }
         }

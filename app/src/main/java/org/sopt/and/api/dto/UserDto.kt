@@ -4,13 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ResponseUserSuccessDto(
-    @SerialName("result")
-    val result: UserData
-)
-
-@Serializable
-data class UserData(
+data class ResponseUserDto(
     @SerialName("no")
     val no: Int
 )

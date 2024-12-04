@@ -1,14 +1,14 @@
 package org.sopt.and.api.service
 
-import okhttp3.ResponseBody
+import org.sopt.and.api.dto.BaseResponse
+import org.sopt.and.api.dto.ResponseLoginDto
 import org.sopt.and.api.dto.RequestLoginDto
-import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface LoginService {
     @POST("/login")
-    fun postLogin(
+    suspend fun postLogin(
         @Body requestLogin: RequestLoginDto
-    ): Call<ResponseBody>
+    ): BaseResponse<ResponseLoginDto>
 }
