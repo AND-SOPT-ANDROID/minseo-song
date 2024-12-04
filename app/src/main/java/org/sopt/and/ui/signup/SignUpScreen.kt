@@ -9,10 +9,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,6 +26,8 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import org.sopt.and.R
 import org.sopt.and.component.InfoTextWithIcon
@@ -34,21 +38,19 @@ import org.sopt.and.component.textField.PasswordTextField
 @Composable
 fun SignUpScreen(
     navController: NavHostController,
-    modifier: Modifier = Modifier,
-    signUpViewModel: SignUpViewModel
+    modifier: Modifier = Modifier
 ) {
-    var userId by remember {
-        mutableStateOf("")
-    }
-    var userPassWord by remember {
-        mutableStateOf("")
-    }
+    val signUpViewModel: SignUpViewModel = viewModel()
+
+    val userId by signUpViewModel.userId.collectAsStateWithLifecycle()
+    val userPassWord by signUpViewModel.userPassWord.collectAsStateWithLifecycle()
+    val userHobby by signUpViewModel.userHobby.collectAsStateWithLifecycle()
+    val errorMessage by signUpViewModel.errorMessage.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    signUpViewModel.initializePreferences(context)
 
     Column(
         modifier = modifier
-    ){
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -58,7 +60,7 @@ fun SignUpScreen(
                 modifier = Modifier
                     .padding(20.dp)
                     .align(Alignment.TopStart)
-            ){
+            ) {
                 Text(
                     text = stringResource(R.string.signup_text),
                     color = Color.Gray
@@ -67,7 +69,7 @@ fun SignUpScreen(
 
                 IDTextField(
                     value = userId,
-                    onValueChange = {userId = it},
+                    onValueChange = { signUpViewModel.updateUserId(it) },
                     modifier = Modifier.fillMaxWidth(),
                     placeholder = context.getString(R.string.signup_id)
                 )
@@ -80,13 +82,20 @@ fun SignUpScreen(
 
                 PasswordTextField(
                     value = userPassWord,
-                    onValueChange = { userPassWord = it },
+                    onValueChange = { signUpViewModel.updateUserPassword(it) },
                     placeholder = stringResource(R.string.signin_password)
                 )
                 Spacer(Modifier.height(10.dp))
 
                 InfoTextWithIcon(
                     text = stringResource(R.string.signup_password_explain)
+                )
+
+                IDTextField(
+                    value = userHobby,
+                    onValueChange = { signUpViewModel.updateUserHobby(it) },
+                    modifier = Modifier.fillMaxWidth(),
+                    placeholder = context.getString(R.string.signup_hobby)
                 )
             }
 
@@ -95,15 +104,16 @@ fun SignUpScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
-            ){
+            ) {
                 Button(
                     onClick = {
-                        if (signUpViewModel.isAbleEmail(userId) && signUpViewModel.isAblePassword(userPassWord)){
-                            signUpViewModel.saveUserInfo(userId, userPassWord)
+                        signUpViewModel.signUpUser {
                             navController.popBackStack()
-                            Toast.makeText(context, (R.string.signup_success),Toast.LENGTH_SHORT).show()
-                        }else{
-                            Toast.makeText(context, (R.string.signup_fail),Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                R.string.signup_success,
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     },
                     modifier = Modifier
@@ -118,6 +128,11 @@ fun SignUpScreen(
                         text = stringResource(R.string.signup_button),
                         color = Color.White
                     )
+                }
+
+                errorMessage?.let {
+                    Spacer(Modifier.height(10.dp))
+                    Text(text = it, color = Color.Red)
                 }
             }
         }

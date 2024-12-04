@@ -1,39 +1,53 @@
 package org.sopt.and.ui.signup
 
-import android.content.Context
-import android.content.SharedPreferences
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import org.sopt.and.model.UserInfo
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import org.sopt.and.api.ServicePool
+import org.sopt.and.api.dto.request.RequestUserDto
 
 
-class SignUpViewModel: ViewModel() {
-    val PASSWORD_MIN_LENGTH = 8
-    val PASSWORD_MAX_LENGTH = 20
-    val PASSWORD_REGEX = Regex("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@\$!%*?&])[A-Za-z\\d@\$!%*?&]{$PASSWORD_MIN_LENGTH,$PASSWORD_MAX_LENGTH}\$")
+class SignUpViewModel : ViewModel() {
+    private val userService = ServicePool.userService
 
-    var sharedPreferences: SharedPreferences? = null
-    var userInfo by mutableStateOf(UserInfo("",""))
+    var userId = MutableStateFlow("")
+        private set
+    var userPassWord = MutableStateFlow("")
+        private set
+    var userHobby = MutableStateFlow("")
+        private set
 
-    fun initializePreferences(context: Context){
-        sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    val errorMessage: StateFlow<String?> get() = _errorMessage
+
+    fun updateUserId(id: String) {
+        userId.value = id
     }
 
-    fun saveUserInfo(id: String, password: String){
-        sharedPreferences?.edit()?.apply(){
-            putString("userId", id)
-            putString("userPassWord", password)
-            apply()
+    fun updateUserPassword(password: String) {
+        userPassWord.value = password
+    }
+
+    fun updateUserHobby(hobby: String) {
+        userHobby.value = hobby
+    }
+
+    fun signUpUser(onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            try {
+                val response = userService.postUser(
+                    RequestUserDto(
+                        username = userId.value,
+                        password = userPassWord.value,
+                        hobby = userHobby.value
+                    )
+                )
+                onSuccess()
+            } catch (e: Exception) {
+                _errorMessage.value = "오류 발생: ${e.message}"
+            }
         }
-    }
-
-    fun isAbleEmail(email: String): Boolean{
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
-    }
-
-    fun isAblePassword(password: String): Boolean{
-        return PASSWORD_REGEX.matches(password)
     }
 }

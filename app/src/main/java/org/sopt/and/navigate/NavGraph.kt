@@ -16,8 +16,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import org.sopt.and.component.bar.BottomBar
 import org.sopt.and.ui.home.HomeScreen
-import org.sopt.and.ui.home.HomeViewModel
 import org.sopt.and.ui.my.MyScreen
+import org.sopt.and.ui.my.MyViewModel
 import org.sopt.and.ui.search.SearchScreen
 import org.sopt.and.ui.signin.SignInScreen
 import org.sopt.and.ui.signin.SignInViewModel
@@ -25,10 +25,7 @@ import org.sopt.and.ui.signup.SignUpScreen
 import org.sopt.and.ui.signup.SignUpViewModel
 
 @Composable
-fun NavGraph(navController: NavHostController){
-    val signUpViewModel: SignUpViewModel = viewModel()
-    val signInViewModel: SignInViewModel = viewModel()
-
+fun NavGraph(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
@@ -37,7 +34,12 @@ fun NavGraph(navController: NavHostController){
             val selectedScreen = ScreenTab.entries.find { it.route == currentRoute }
             if (selectedScreen != null) {
                 BottomBar(selected = selectedScreen, navController = navController)
-            }else if (currentRoute in listOf(Routes.Home.route, Routes.My.route, Routes.Search.route)) {
+            } else if (currentRoute in listOf(
+                    Routes.Home.route,
+                    Routes.My.route,
+                    Routes.Search.route
+                )
+            ) {
                 BottomBar(selected = null, navController = navController)
             }
         }
@@ -49,9 +51,21 @@ fun NavGraph(navController: NavHostController){
                 .padding(paddingValues)
         ) {
             NavHost(navController = navController, startDestination = Routes.SignIn.route) {
-                composable(Routes.SignIn.route) { SignInScreen(navController, signInViewModel = signInViewModel) }
-                composable(Routes.SignUp.route) { SignUpScreen(navController, signUpViewModel = signUpViewModel) }
-                composable(Routes.My.route) { MyScreen(navController, signInViewModel = signInViewModel) }
+                composable(Routes.SignIn.route) {
+                    SignInScreen(
+                        navController
+                    )
+                }
+                composable(Routes.SignUp.route) {
+                    SignUpScreen(
+                        navController
+                    )
+                }
+                composable(Routes.My.route) {
+                    MyScreen(
+                        navController
+                    )
+                }
                 composable(Routes.Search.route) { SearchScreen(navController) }
                 composable(Routes.Home.route) { HomeScreen(navController) }
             }

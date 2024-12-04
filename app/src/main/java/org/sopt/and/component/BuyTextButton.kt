@@ -18,7 +18,7 @@ import org.sopt.and.R
 @Composable
 fun BuyTextButton(
     labelText: String,
-    onClick: ()->Unit
+    onClick: () -> Unit
 ) {
     Column {
         Text(

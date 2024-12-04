@@ -27,7 +27,7 @@ fun TopBar(modifier: Modifier = Modifier) {
             modifier = Modifier.width(100.dp)
         )
 
-        Row{
+        Row {
             Image(
                 painter = painterResource(R.drawable.outline_cast_connected_24),
                 contentDescription = "",

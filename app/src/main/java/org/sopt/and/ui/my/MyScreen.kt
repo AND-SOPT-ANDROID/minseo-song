@@ -1,5 +1,6 @@
 package org.sopt.and.ui.my
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -12,34 +13,47 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import org.sopt.and.R
-import org.sopt.and.component.bar.BottomBar
 import org.sopt.and.component.BuyTextButton
 import org.sopt.and.component.MyPageItem
-import org.sopt.and.ui.signin.SignInViewModel
 
 @Composable
 fun MyScreen(
-    navController: NavHostController,
-    signInViewModel: SignInViewModel
+    navController: NavHostController
 ) {
-    val userId = signInViewModel.userInfo.userId
+    val myViewModel: MyViewModel = viewModel()
+
+    val context = LocalContext.current
+    val sharedPreferences = remember {
+        context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+    }
+
+    LaunchedEffect(Unit) {
+        myViewModel.getUserHobby(sharedPreferences)
+    }
+
+    val hobby by myViewModel.hobby.collectAsState()
 
     Column(
         modifier = Modifier.fillMaxSize()
-    ){
+    ) {
         Column(
             modifier = Modifier
                 .background(Color.DarkGray)
@@ -61,7 +75,7 @@ fun MyScreen(
                     contentScale = ContentScale.Fit
                 )
                 Text(
-                    text = stringResource(R.string.my_nickname, userId),
+                    text = stringResource(R.string.my_nickname, hobby),
                     color = Color.White,
                     modifier = Modifier.weight(1f)
                 )

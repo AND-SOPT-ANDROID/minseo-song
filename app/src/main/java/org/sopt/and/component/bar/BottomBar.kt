@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import org.sopt.and.navigate.Routes
 import org.sopt.and.navigate.ScreenTab
 
 @Composable
@@ -55,8 +54,8 @@ fun BottomBar(
 
                     BottomTab(
                         onClick = {
-                            navController.navigate(tab.route){
-                                popUpTo(tab.route){
+                            navController.navigate(tab.route) {
+                                popUpTo(tab.route) {
                                     inclusive = true
                                 }
                             }

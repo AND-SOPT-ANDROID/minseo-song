@@ -15,7 +15,7 @@ fun IDTextField(
     onValueChange: (String) -> Unit,
     placeholder: String,
     modifier: Modifier = Modifier
-){
+) {
     TextField(
         value = value,
         onValueChange = onValueChange,

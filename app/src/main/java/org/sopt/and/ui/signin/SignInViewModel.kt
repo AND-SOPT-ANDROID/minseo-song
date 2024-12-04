@@ -2,40 +2,54 @@ package org.sopt.and.ui.signin
 
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import org.sopt.and.model.UserInfo
+import kotlinx.coroutines.launch
+import org.sopt.and.api.ServicePool
+import org.sopt.and.api.dto.request.RequestLoginDto
 
 
 class SignInViewModel : ViewModel() {
-    var userInfo by mutableStateOf(UserInfo("", ""))
-    var sharedPreferences: SharedPreferences? = null
+    private val loginService = ServicePool.loginService
+
+    var userId = MutableStateFlow("")
+        private set
+    var userPassWord = MutableStateFlow("")
+        private set
 
     private val _snackbarMessage = MutableStateFlow<String?>(null)
     val snackbarMessage: StateFlow<String?> get() = _snackbarMessage
+
+    private var sharedPreferences: SharedPreferences? = null
 
     fun initializePreferences(context: Context) {
         sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
     }
 
-    fun updateUserInfo(id: String, password: String) {
-        userInfo = UserInfo(userId = id, userPassWord = password)
+    private fun saveToken(token: String) {
+        sharedPreferences?.edit()?.putString("token", token)?.apply()
     }
 
-    fun performLogin() {
-        val savedUserId = sharedPreferences?.getString("userId", "") ?: ""
-        val savedUserPassword = sharedPreferences?.getString("userPassWord", "") ?: ""
-        val loginSuccess =
-            (userInfo.userId == savedUserId && userInfo.userPassWord == savedUserPassword)
+    fun updateUserId(id: String) {
+        userId.value = id
+    }
 
-        _snackbarMessage.value = if (loginSuccess) {
-            "로그인 성공"
-        } else {
-            "로그인 실패"
+    fun updateUserPassword(password: String) {
+        userPassWord.value = password
+    }
+
+    fun loginUser() {
+        viewModelScope.launch {
+            try {
+                val response = loginService.postLogin(RequestLoginDto(userId.value, userPassWord.value))
+                val token = response.result.token
+                saveToken(token)
+                _snackbarMessage.value = "로그인 성공!"
+            } catch (e: Exception) {
+                _snackbarMessage.value = "오류 발생: ${e.message}"
+            }
         }
     }
 
@@ -43,3 +57,4 @@ class SignInViewModel : ViewModel() {
         _snackbarMessage.value = null
     }
 }
+
