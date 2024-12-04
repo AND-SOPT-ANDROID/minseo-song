@@ -1,5 +1,6 @@
 package org.sopt.and.presentation.ui.signup
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +29,7 @@ import org.sopt.and.R
 import org.sopt.and.presentation.ui.component.InfoTextWithIcon
 import org.sopt.and.presentation.ui.component.textField.IDTextField
 import org.sopt.and.presentation.ui.component.textField.PasswordTextField
+import org.sopt.and.presentation.ui.navigation.Routes
 
 @Composable
 fun SignUpScreen(
@@ -39,7 +42,19 @@ fun SignUpScreen(
     val userPassWord by signUpViewModel.userPassWord.collectAsStateWithLifecycle()
     val userHobby by signUpViewModel.userHobby.collectAsStateWithLifecycle()
     val errorMessage by signUpViewModel.errorMessage.collectAsStateWithLifecycle()
+    val successMessage by signUpViewModel.successMessage.collectAsStateWithLifecycle()
+    val navigateToSignIn by signUpViewModel.navigateToSignIn.collectAsStateWithLifecycle()
     val context = LocalContext.current
+
+    if (navigateToSignIn) {
+        LaunchedEffect(Unit) {
+            Toast.makeText(context, successMessage ?: "회원가입 성공!", Toast.LENGTH_SHORT).show()
+            signUpViewModel.clearNavigationFlag()
+            navController.navigate(Routes.SignIn.route) {
+                popUpTo(Routes.SignUp.route) { inclusive = true }
+            }
+        }
+    }
 
     Column(
         modifier = modifier

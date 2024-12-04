@@ -27,6 +27,9 @@ class SignUpViewModel @Inject constructor(
     private val _successMessage = MutableStateFlow<String?>(null)
     val successMessage: StateFlow<String?> get() = _successMessage
 
+    private val _navigateToSignIn = MutableStateFlow(false)
+    val navigateToSignIn: StateFlow<Boolean> get() = _navigateToSignIn
+
     fun updateUserId(id: String) {
         userId.value = id
     }
@@ -44,6 +47,7 @@ class SignUpViewModel @Inject constructor(
             val result = signUpUseCase.invoke(userId.value, userPassWord.value, userHobby.value)
             result.onSuccess { response ->
                 _successMessage.value = "회원가입 성공! 유저 ID: ${response.result.userNumber}"
+                _navigateToSignIn.value = true
                 clearErrorMessage()
             }.onFailure { error ->
                 _errorMessage.value = when (error) {
@@ -62,5 +66,9 @@ class SignUpViewModel @Inject constructor(
 
     private fun clearSuccessMessage() {
         _successMessage.value = null
+    }
+
+    fun clearNavigationFlag() {
+        _navigateToSignIn.value = false
     }
 }
