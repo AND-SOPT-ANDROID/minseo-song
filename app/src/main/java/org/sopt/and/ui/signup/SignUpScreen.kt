@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
@@ -26,6 +27,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import org.sopt.and.R
 import org.sopt.and.component.InfoTextWithIcon
@@ -36,20 +38,15 @@ import org.sopt.and.component.textField.PasswordTextField
 @Composable
 fun SignUpScreen(
     navController: NavHostController,
-    modifier: Modifier = Modifier,
-    signUpViewModel: SignUpViewModel
+    modifier: Modifier = Modifier
 ) {
-    var userId by remember {
-        mutableStateOf("")
-    }
-    var userPassWord by remember {
-        mutableStateOf("")
-    }
-    var userHobby by remember {
-        mutableStateOf("")
-    }
-    val context = LocalContext.current
+    val signUpViewModel: SignUpViewModel = viewModel()
+
+    val userId by signUpViewModel.userId.collectAsStateWithLifecycle()
+    val userPassWord by signUpViewModel.userPassWord.collectAsStateWithLifecycle()
+    val userHobby by signUpViewModel.userHobby.collectAsStateWithLifecycle()
     val errorMessage by signUpViewModel.errorMessage.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     Column(
         modifier = modifier
@@ -72,7 +69,7 @@ fun SignUpScreen(
 
                 IDTextField(
                     value = userId,
-                    onValueChange = { userId = it },
+                    onValueChange = { signUpViewModel.updateUserId(it) },
                     modifier = Modifier.fillMaxWidth(),
                     placeholder = context.getString(R.string.signup_id)
                 )
@@ -85,7 +82,7 @@ fun SignUpScreen(
 
                 PasswordTextField(
                     value = userPassWord,
-                    onValueChange = { userPassWord = it },
+                    onValueChange = { signUpViewModel.updateUserPassword(it) },
                     placeholder = stringResource(R.string.signin_password)
                 )
                 Spacer(Modifier.height(10.dp))
@@ -96,7 +93,7 @@ fun SignUpScreen(
 
                 IDTextField(
                     value = userHobby,
-                    onValueChange = { userHobby = it },
+                    onValueChange = { signUpViewModel.updateUserHobby(it) },
                     modifier = Modifier.fillMaxWidth(),
                     placeholder = context.getString(R.string.signup_hobby)
                 )
@@ -110,20 +107,14 @@ fun SignUpScreen(
             ) {
                 Button(
                     onClick = {
-                        signUpViewModel.signUpUser(
-                            username = userId,
-                            password = userPassWord,
-                            hobby = userHobby,
-                            onSuccess = {
-                                navController.popBackStack()
-                                Toast.makeText(
-                                    context,
-                                    R.string.signup_success,
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        )
-
+                        signUpViewModel.signUpUser {
+                            navController.popBackStack()
+                            Toast.makeText(
+                                context,
+                                R.string.signup_success,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     },
                     modifier = Modifier
                         .fillMaxWidth()

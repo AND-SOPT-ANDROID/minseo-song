@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 import org.sopt.and.api.ServicePool
 
 class MyViewModel : ViewModel() {
-    private val hobbyService = ServicePool.hobbyService
+    private val userService = ServicePool.userService
 
     val _hobby = MutableStateFlow<String>("")
     val hobby: StateFlow<String> get() = _hobby
@@ -26,7 +26,7 @@ class MyViewModel : ViewModel() {
 
         viewModelScope.launch {
             try {
-                val response = hobbyService.getMyHobby(token)
+                val response = userService.getMyHobby(token)
                 _hobby.value = response.result.hobby
             } catch (e: Exception) {
                 _errorMessage.value = "오류 발생: ${e.message}"

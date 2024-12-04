@@ -8,11 +8,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.sopt.and.api.ServicePool
-import org.sopt.and.api.dto.RequestLoginDto
+import org.sopt.and.api.dto.request.RequestLoginDto
 
 
 class SignInViewModel : ViewModel() {
     private val loginService = ServicePool.loginService
+
+    var userId = MutableStateFlow("")
+        private set
+    var userPassWord = MutableStateFlow("")
+        private set
 
     private val _snackbarMessage = MutableStateFlow<String?>(null)
     val snackbarMessage: StateFlow<String?> get() = _snackbarMessage
@@ -27,10 +32,18 @@ class SignInViewModel : ViewModel() {
         sharedPreferences?.edit()?.putString("token", token)?.apply()
     }
 
-    fun loginUser(username: String, password: String) {
+    fun updateUserId(id: String) {
+        userId.value = id
+    }
+
+    fun updateUserPassword(password: String) {
+        userPassWord.value = password
+    }
+
+    fun loginUser() {
         viewModelScope.launch {
             try {
-                val response = loginService.postLogin(RequestLoginDto(username, password))
+                val response = loginService.postLogin(RequestLoginDto(userId.value, userPassWord.value))
                 val token = response.result.token
                 saveToken(token)
                 _snackbarMessage.value = "로그인 성공!"
@@ -44,3 +57,4 @@ class SignInViewModel : ViewModel() {
         _snackbarMessage.value = null
     }
 }
+

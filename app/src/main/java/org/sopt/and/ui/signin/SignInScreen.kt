@@ -21,17 +21,16 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import org.sopt.and.R
 import org.sopt.and.component.textField.IDTextField
@@ -41,16 +40,13 @@ import org.sopt.and.navigate.Routes
 @Composable
 fun SignInScreen(
     navController: NavHostController,
-    modifier: Modifier = Modifier,
-    signInViewModel: SignInViewModel
+    modifier: Modifier = Modifier
 ) {
-    var userId by remember {
-        mutableStateOf("")
-    }
-    var userPassWord by remember {
-        mutableStateOf("")
-    }
-    val snackbarMessage by signInViewModel.snackbarMessage.collectAsState()
+    val signInViewModel: SignInViewModel = viewModel()
+
+    val userId by signInViewModel.userId.collectAsStateWithLifecycle()
+    val userPassWord by signInViewModel.userPassWord.collectAsStateWithLifecycle()
+    val snackbarMessage by signInViewModel.snackbarMessage.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
@@ -90,7 +86,7 @@ fun SignInScreen(
         ) {
             IDTextField(
                 value = userId,
-                onValueChange = { userId = it },
+                onValueChange = { signInViewModel.updateUserId(it) },
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = context.getString(R.string.signin_id)
             )
@@ -98,17 +94,14 @@ fun SignInScreen(
 
             PasswordTextField(
                 value = userPassWord,
-                onValueChange = { userPassWord = it },
+                onValueChange = { signInViewModel.updateUserPassword(it) },
                 placeholder = stringResource(R.string.signin_password)
             )
             Spacer(Modifier.height(30.dp))
 
             Button(
                 onClick = {
-                    signInViewModel.loginUser(
-                        username = userId,
-                        password = userPassWord
-                    )
+                    signInViewModel.loginUser()
                 },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
@@ -160,7 +153,6 @@ fun SignInScreen(
                 )
                 Spacer(Modifier.width(10.dp))
 
-                // 회원가입
                 Text(
                     text = stringResource(R.string.signin_to_signup),
                     color = Color.Gray,

@@ -1,14 +1,7 @@
-package org.sopt.and.api.dto
+package org.sopt.and.api.dto.request
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-
-
-@Serializable
-data class ResponseLoginDto(
-    @SerialName("token")
-    val token: String
-)
 
 @Serializable
 data class RequestLoginDto(

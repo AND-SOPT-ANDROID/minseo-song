@@ -26,10 +26,6 @@ import org.sopt.and.ui.signup.SignUpViewModel
 
 @Composable
 fun NavGraph(navController: NavHostController) {
-    val signUpViewModel: SignUpViewModel = viewModel()
-    val signInViewModel: SignInViewModel = viewModel()
-    val myViewModel: MyViewModel = viewModel()
-
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
@@ -57,20 +53,17 @@ fun NavGraph(navController: NavHostController) {
             NavHost(navController = navController, startDestination = Routes.SignIn.route) {
                 composable(Routes.SignIn.route) {
                     SignInScreen(
-                        navController,
-                        signInViewModel = signInViewModel
+                        navController
                     )
                 }
                 composable(Routes.SignUp.route) {
                     SignUpScreen(
-                        navController,
-                        signUpViewModel = signUpViewModel
+                        navController
                     )
                 }
                 composable(Routes.My.route) {
                     MyScreen(
-                        navController,
-                        myViewModel = myViewModel
+                        navController
                     )
                 }
                 composable(Routes.Search.route) { SearchScreen(navController) }
