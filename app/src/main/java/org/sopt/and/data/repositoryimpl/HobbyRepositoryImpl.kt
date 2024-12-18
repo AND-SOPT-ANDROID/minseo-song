@@ -1,16 +1,17 @@
 package org.sopt.and.data.repositoryimpl
 
-import org.sopt.and.data.dataremote.datasource.HobbyRemoteDataSource
-import org.sopt.and.data.dataremote.model.response.BaseResponse
-import org.sopt.and.data.dataremote.model.response.ResponseHobbyDto
+import org.sopt.and.data.mapper.toDomain
+import org.sopt.and.data.remote.datasource.HobbyRemoteDataSource
+import org.sopt.and.domain.model.Hobby
 import org.sopt.and.domain.repository.HobbyRepository
 import javax.inject.Inject
 
 class HobbyRepositoryImpl @Inject constructor(
     private val hobbyRemoteDataSource: HobbyRemoteDataSource
 ) : HobbyRepository {
-    override suspend fun getMyHobby(token: String): Result<BaseResponse<ResponseHobbyDto>> =
+    override suspend fun getMyHobby(token: String): Result<Hobby> =
         runCatching {
-            hobbyRemoteDataSource.getMyHobby(token)
+            val response = hobbyRemoteDataSource.getMyHobby(token)
+            response.toDomain()
         }
 }

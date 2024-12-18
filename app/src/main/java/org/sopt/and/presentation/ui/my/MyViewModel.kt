@@ -34,7 +34,7 @@ class MyViewModel @Inject constructor(
         viewModelScope.launch {
             val result = hobbyUseCase(token)
             result.onSuccess { response ->
-                setState { copy(hobby = response.result.hobby, isLoading = false) }
+                setState { copy(hobby = response.hobby, isLoading = false) }
             }.onFailure {
                 setState { copy(isLoading = false) }
             }

@@ -1,12 +1,14 @@
-package org.sopt.and.data.dataremote.model.request
+package org.sopt.and.data.remote.model.request
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RequestLoginDto(
+data class RequestUserDto(
     @SerialName("username")
     val username: String,
     @SerialName("password")
-    val password: String
+    val password: String,
+    @SerialName("hobby")
+    val hobby: String
 )

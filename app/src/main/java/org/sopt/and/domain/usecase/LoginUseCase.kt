@@ -1,7 +1,6 @@
 package org.sopt.and.domain.usecase
 
-import org.sopt.and.data.dataremote.model.response.BaseResponse
-import org.sopt.and.data.dataremote.model.response.ResponseLoginDto
+import org.sopt.and.domain.model.Token
 import org.sopt.and.domain.repository.LoginRepository
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -13,7 +12,7 @@ class LoginUseCase @Inject constructor(
     suspend operator fun invoke(
         userName: String,
         userPassword: String
-    ): Result<BaseResponse<ResponseLoginDto>> {
+    ): Result<Token> {
         return loginRepository.postLogin(userName, userPassword)
     }
 }

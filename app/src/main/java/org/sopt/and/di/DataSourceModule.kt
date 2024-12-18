@@ -4,12 +4,12 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.sopt.and.data.dataremote.datasource.HobbyRemoteDataSource
-import org.sopt.and.data.dataremote.datasource.LoginRemoteDataSource
-import org.sopt.and.data.dataremote.datasource.SignUpRemoteDataSource
-import org.sopt.and.data.dataremote.datasourceimpl.HobbyRemoteDataSourceImpl
-import org.sopt.and.data.dataremote.datasourceimpl.LoginRemoteDataSourceImpl
-import org.sopt.and.data.dataremote.datasourceimpl.SignUpRemoteDataSourceImpl
+import org.sopt.and.data.remote.datasource.HobbyRemoteDataSource
+import org.sopt.and.data.remote.datasource.LoginRemoteDataSource
+import org.sopt.and.data.remote.datasource.SignUpRemoteDataSource
+import org.sopt.and.data.remote.datasourceimpl.HobbyRemoteDataSourceImpl
+import org.sopt.and.data.remote.datasourceimpl.LoginRemoteDataSourceImpl
+import org.sopt.and.data.remote.datasourceimpl.SignUpRemoteDataSourceImpl
 import javax.inject.Singleton
 
 @Module

@@ -31,7 +31,7 @@ class SignUpViewModel @Inject constructor(
             val result = signUpUseCase.invoke(currentState.userId, currentState.userPassWord, currentState.userHobby)
             result.onSuccess { response ->
                 setState { copy(isLoading = false) }
-                setSideEffect { SignUpSideEffect.ShowToast("회원가입 성공! 유저 ID: ${response.result.userNumber}") }
+                setSideEffect { SignUpSideEffect.ShowToast("회원가입 성공! 유저 ID: ${response.userNumber}") }
                 setSideEffect { SignUpSideEffect.NavigateToSignIn }
             }.onFailure { error ->
                 val errorMessage = when (error) {

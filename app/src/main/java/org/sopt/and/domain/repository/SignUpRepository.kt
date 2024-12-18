@@ -1,12 +1,11 @@
 package org.sopt.and.domain.repository
 
-import org.sopt.and.data.dataremote.model.response.BaseResponse
-import org.sopt.and.data.dataremote.model.response.ResponseUserDto
+import org.sopt.and.domain.model.User
 
 interface SignUpRepository {
     suspend fun postUser(
         userName: String,
         userPassword: String,
         userHobby: String
-    ): Result<BaseResponse<ResponseUserDto>>
+    ): Result<User>
 }

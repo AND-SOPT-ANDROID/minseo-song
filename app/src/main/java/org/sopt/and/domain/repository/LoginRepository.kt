@@ -1,11 +1,10 @@
 package org.sopt.and.domain.repository
 
-import org.sopt.and.data.dataremote.model.response.BaseResponse
-import org.sopt.and.data.dataremote.model.response.ResponseLoginDto
+import org.sopt.and.domain.model.Token
 
 interface LoginRepository {
     suspend fun postLogin(
         userName: String,
         userPassword: String
-    ): Result<BaseResponse<ResponseLoginDto>>
+    ): Result<Token>
 }
