@@ -9,6 +9,7 @@ import javax.inject.Inject
 
 class SignUpRemoteDataSourceImpl @Inject constructor(
     private val userService: UserService
-):SignUpRemoteDataSource{
-    override suspend fun postUser(requestUserDto: RequestUserDto): BaseResponse<ResponseUserDto> = userService.postUser(requestUserDto)
+) : SignUpRemoteDataSource {
+    override suspend fun postUser(requestUserDto: RequestUserDto): BaseResponse<ResponseUserDto> =
+        userService.postUser(requestUserDto)
 }

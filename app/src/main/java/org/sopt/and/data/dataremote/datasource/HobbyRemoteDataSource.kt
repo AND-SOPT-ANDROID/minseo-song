@@ -4,5 +4,5 @@ import org.sopt.and.data.dataremote.model.response.BaseResponse
 import org.sopt.and.data.dataremote.model.response.ResponseHobbyDto
 
 interface HobbyRemoteDataSource {
-    suspend fun getMyHobby(token: String):BaseResponse<ResponseHobbyDto>
+    suspend fun getMyHobby(token: String): BaseResponse<ResponseHobbyDto>
 }

@@ -9,8 +9,8 @@ import javax.inject.Singleton
 @Singleton
 class HobbyUseCase @Inject constructor(
     private val hobbyRepository: HobbyRepository
-){
-    suspend operator fun invoke(token: String): Result<BaseResponse<ResponseHobbyDto>>{
+) {
+    suspend operator fun invoke(token: String): Result<BaseResponse<ResponseHobbyDto>> {
         return hobbyRepository.getMyHobby(token)
     }
 }

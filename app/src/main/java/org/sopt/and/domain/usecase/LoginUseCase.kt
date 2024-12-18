@@ -9,8 +9,11 @@ import javax.inject.Singleton
 @Singleton
 class LoginUseCase @Inject constructor(
     private val loginRepository: LoginRepository
-){
-    suspend operator fun invoke(userName: String, userPassword: String): Result<BaseResponse<ResponseLoginDto>> {
+) {
+    suspend operator fun invoke(
+        userName: String,
+        userPassword: String
+    ): Result<BaseResponse<ResponseLoginDto>> {
         return loginRepository.postLogin(userName, userPassword)
     }
 }

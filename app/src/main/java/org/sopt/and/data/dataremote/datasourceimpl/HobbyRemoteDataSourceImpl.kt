@@ -8,6 +8,7 @@ import javax.inject.Inject
 
 class HobbyRemoteDataSourceImpl @Inject constructor(
     private val userService: UserService
-):HobbyRemoteDataSource{
-    override suspend fun getMyHobby(token: String): BaseResponse<ResponseHobbyDto> = userService.getMyHobby(token)
+) : HobbyRemoteDataSource {
+    override suspend fun getMyHobby(token: String): BaseResponse<ResponseHobbyDto> =
+        userService.getMyHobby(token)
 }

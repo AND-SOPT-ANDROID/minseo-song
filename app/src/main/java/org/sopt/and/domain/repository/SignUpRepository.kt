@@ -8,5 +8,5 @@ interface SignUpRepository {
         userName: String,
         userPassword: String,
         userHobby: String
-    ):Result<BaseResponse<ResponseUserDto>>
+    ): Result<BaseResponse<ResponseUserDto>>
 }
