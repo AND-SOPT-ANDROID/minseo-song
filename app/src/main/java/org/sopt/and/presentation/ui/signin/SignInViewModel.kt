@@ -2,64 +2,57 @@ package org.sopt.and.presentation.ui.signin
 
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.sopt.and.domain.usecase.LoginUseCase
+import org.sopt.and.presentation.core.BaseViewModel
+import retrofit2.HttpException
 import javax.inject.Inject
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase
-) : ViewModel() {
-    var userId = MutableStateFlow("")
-        private set
-    var userPassWord = MutableStateFlow("")
-        private set
-
-    private val _snackbarMessage = MutableStateFlow<String?>(null)
-    val snackbarMessage: StateFlow<String?> get() = _snackbarMessage
+) : BaseViewModel<SignInState, SignInSideEffect, SignInEvent>() {
 
     private var sharedPreferences: SharedPreferences? = null
+
+    override fun createInitialState(): SignInState = SignInState()
 
     fun initializePreferences(context: Context) {
         sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
     }
 
-    private fun saveToken(token: String) {
-        sharedPreferences?.edit()?.putString("token", token)?.apply()
+    override suspend fun handleEvent(event: SignInEvent) {
+        when (event) {
+            is SignInEvent.UserIdChanged -> setState { copy(userId = event.userId) }
+            is SignInEvent.UserPasswordChanged -> setState { copy(userPassWord = event.password) }
+            is SignInEvent.SignInClicked -> loginUser()
+        }
     }
 
-    fun updateUserId(id: String) {
-        userId.value = id
-    }
-
-    fun updateUserPassword(password: String) {
-        userPassWord.value = password
-    }
-
-    fun loginUser() {
+    private fun loginUser() {
+        setState { copy(isLoading = true) }
         viewModelScope.launch {
-            val result = loginUseCase.invoke(userId.value, userPassWord.value)
+            val state = uiState.value
+            val result = loginUseCase.invoke(state.userId, state.userPassWord)
             result.onSuccess { response ->
-                val token = response.result.token
-                saveToken(token)
-                _snackbarMessage.value = "로그인 성공!"
+                saveToken(response.result.token)
+                setState { copy(isLoading = false) }
+                setSideEffect { SignInSideEffect.NavigateToMyScreen }
             }.onFailure { error ->
-                _snackbarMessage.value = when (error) {
-                    is retrofit2.HttpException -> "서버 오류: ${error.code()} ${error.message()}"
+                val message = when (error) {
+                    is HttpException -> "서버 오류: ${error.code()} ${error.message()}"
                     is java.net.UnknownHostException -> "네트워크 연결 오류"
-                    else -> "${error.message}"
+                    else -> error.message ?: "알 수 없는 오류"
                 }
+                setState { copy(isLoading = false) }
+                setSideEffect { SignInSideEffect.ShowSnackBar(message) }
             }
         }
     }
 
-    fun clearSnackbarMessage() {
-        _snackbarMessage.value = null
+    private fun saveToken(token: String) {
+        sharedPreferences?.edit()?.putString("token", token)?.apply()
     }
 }
-

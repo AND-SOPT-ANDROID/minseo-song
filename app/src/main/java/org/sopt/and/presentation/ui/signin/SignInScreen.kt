@@ -33,6 +33,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.flow.collectLatest
 import org.sopt.and.R
 import org.sopt.and.presentation.ui.component.textField.IDTextField
 import org.sopt.and.presentation.ui.component.textField.PasswordTextField
@@ -45,32 +46,25 @@ fun SignInScreen(
 ) {
     val signInViewModel: SignInViewModel = hiltViewModel()
 
-    val userId by signInViewModel.userId.collectAsStateWithLifecycle()
-    val userPassWord by signInViewModel.userPassWord.collectAsStateWithLifecycle()
-    val snackbarMessage by signInViewModel.snackbarMessage.collectAsStateWithLifecycle()
+    val state by signInViewModel.uiState.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
 
     signInViewModel.initializePreferences(context)
 
-    LaunchedEffect(snackbarMessage) {
-        snackbarMessage?.let { message ->
-            val result = snackbarHostState.showSnackbar(
-                message = message,
-                actionLabel = "닫기",
-                duration = SnackbarDuration.Indefinite
-            )
-
-            if (result == SnackbarResult.ActionPerformed && message == context.getString(R.string.signin_success)) {
-                navController.navigate(Routes.My.route) {
-                    popUpTo(Routes.SignIn.route) {
-                        inclusive = true
+    LaunchedEffect(Unit) {
+        signInViewModel.sideEffect.collectLatest { sideEffect ->
+            when (sideEffect) {
+                is SignInSideEffect.ShowSnackBar -> {
+                    snackbarHostState.showSnackbar(sideEffect.message)
+                }
+                is SignInSideEffect.NavigateToMyScreen -> {
+                    navController.navigate(Routes.My.route) {
+                        popUpTo(Routes.SignIn.route) { inclusive = true }
                     }
                 }
             }
-
-            signInViewModel.clearSnackbarMessage()
         }
     }
 
@@ -86,23 +80,23 @@ fun SignInScreen(
                 .padding(20.dp)
         ) {
             IDTextField(
-                value = userId,
-                onValueChange = { signInViewModel.updateUserId(it) },
+                value = state.userId,
+                onValueChange = { signInViewModel.setEvent(SignInEvent.UserIdChanged(it)) },
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = context.getString(R.string.signin_id)
             )
             Spacer(Modifier.height(5.dp))
 
             PasswordTextField(
-                value = userPassWord,
-                onValueChange = { signInViewModel.updateUserPassword(it) },
+                value = state.userPassWord,
+                onValueChange = { signInViewModel.setEvent(SignInEvent.UserPasswordChanged(it)) },
                 placeholder = stringResource(R.string.signin_password)
             )
             Spacer(Modifier.height(30.dp))
 
             Button(
                 onClick = {
-                    signInViewModel.loginUser()
+                    signInViewModel.setEvent(SignInEvent.SignInClicked)
                 },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
