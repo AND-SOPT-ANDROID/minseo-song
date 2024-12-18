@@ -35,7 +35,7 @@ class SignInViewModel @Inject constructor(
         setState { copy(isLoading = true) }
         viewModelScope.launch {
             val state = uiState.value
-            val result = loginUseCase.invoke(state.userId, state.userPassWord)
+            val result = loginUseCase(state.userId, state.userPassWord)
             result.onSuccess { response ->
                 saveToken(response.token)
                 setState { copy(isLoading = false) }

@@ -28,7 +28,7 @@ class SignUpViewModel @Inject constructor(
         setState { copy(isLoading = true) }
         val currentState = uiState.value
         viewModelScope.launch {
-            val result = signUpUseCase.invoke(currentState.userId, currentState.userPassWord, currentState.userHobby)
+            val result = signUpUseCase(currentState.userId, currentState.userPassWord, currentState.userHobby)
             result.onSuccess { response ->
                 setState { copy(isLoading = false) }
                 setSideEffect { SignUpSideEffect.ShowToast("회원가입 성공! 유저 ID: ${response.userNumber}") }

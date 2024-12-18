@@ -9,10 +9,6 @@ plugins {
     id("org.jetbrains.kotlin.kapt")
 }
 
-hilt{
-    enableAggregatingTask = false
-}
-
 val properties = Properties().apply{
     load(project.rootProject.file("local.properties").inputStream())
 }
