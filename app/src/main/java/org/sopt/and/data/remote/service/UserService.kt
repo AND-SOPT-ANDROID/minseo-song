@@ -1,9 +1,9 @@
-package org.sopt.and.data.dataremote.service
+package org.sopt.and.data.remote.service
 
-import org.sopt.and.data.dataremote.model.request.RequestUserDto
-import org.sopt.and.data.dataremote.model.response.BaseResponse
-import org.sopt.and.data.dataremote.model.response.ResponseHobbyDto
-import org.sopt.and.data.dataremote.model.response.ResponseUserDto
+import org.sopt.and.data.remote.model.request.RequestUserDto
+import org.sopt.and.data.remote.model.response.BaseResponse
+import org.sopt.and.data.remote.model.response.ResponseHobbyDto
+import org.sopt.and.data.remote.model.response.ResponseUserDto
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header

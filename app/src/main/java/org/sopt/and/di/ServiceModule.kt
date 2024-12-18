@@ -4,8 +4,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.sopt.and.data.dataremote.service.LoginService
-import org.sopt.and.data.dataremote.service.UserService
+import org.sopt.and.data.remote.service.LoginService
+import org.sopt.and.data.remote.service.UserService
 import retrofit2.Retrofit
 import javax.inject.Singleton
 

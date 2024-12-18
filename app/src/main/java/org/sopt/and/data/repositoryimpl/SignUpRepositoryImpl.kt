@@ -1,9 +1,9 @@
 package org.sopt.and.data.repositoryimpl
 
-import org.sopt.and.data.dataremote.datasource.SignUpRemoteDataSource
-import org.sopt.and.data.dataremote.model.request.RequestUserDto
-import org.sopt.and.data.dataremote.model.response.BaseResponse
-import org.sopt.and.data.dataremote.model.response.ResponseUserDto
+import org.sopt.and.data.mapper.toDomain
+import org.sopt.and.data.remote.datasource.SignUpRemoteDataSource
+import org.sopt.and.data.remote.model.request.RequestUserDto
+import org.sopt.and.domain.model.User
 import org.sopt.and.domain.repository.SignUpRepository
 import javax.inject.Inject
 
@@ -14,7 +14,8 @@ class SignUpRepositoryImpl @Inject constructor(
         userName: String,
         userPassword: String,
         userHobby: String
-    ): Result<BaseResponse<ResponseUserDto>> = runCatching {
-        signUpRemoteDataSource.postUser(RequestUserDto(userName, userPassword, userHobby))
+    ): Result<User> = runCatching {
+        val response = signUpRemoteDataSource.postUser(RequestUserDto(userName, userPassword, userHobby))
+        response.toDomain()
     }
 }

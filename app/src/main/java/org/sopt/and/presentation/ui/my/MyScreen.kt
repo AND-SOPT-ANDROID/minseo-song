@@ -29,6 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import org.sopt.and.R
@@ -40,6 +41,7 @@ fun MyScreen(
     navController: NavHostController
 ) {
     val myViewModel: MyViewModel = hiltViewModel()
+    val state by myViewModel.uiState.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
     val sharedPreferences = remember {
@@ -49,8 +51,6 @@ fun MyScreen(
     LaunchedEffect(Unit) {
         myViewModel.getUserHobby(sharedPreferences)
     }
-
-    val hobby by myViewModel.hobby.collectAsState()
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -76,7 +76,7 @@ fun MyScreen(
                     contentScale = ContentScale.Fit
                 )
                 Text(
-                    text = stringResource(R.string.my_nickname, hobby),
+                    text = stringResource(R.string.my_nickname, state.hobby),
                     color = Color.White,
                     modifier = Modifier.weight(1f)
                 )
