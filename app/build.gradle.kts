@@ -5,6 +5,12 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.dagger.hilt)
+    id("org.jetbrains.kotlin.kapt")
+}
+
+hilt{
+    enableAggregatingTask = false
 }
 
 val properties = Properties().apply{
@@ -70,6 +76,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
     // Network
     implementation(platform(libs.okhttp.bom))
     implementation(libs.okhttp)
@@ -77,4 +84,8 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.kotlin.serialization.converter)
     implementation(libs.kotlinx.serialization.json)
+
+    // Hilt
+    implementation(libs.bundles.hilt)
+    kapt(libs.hilt.compiler)
 }
