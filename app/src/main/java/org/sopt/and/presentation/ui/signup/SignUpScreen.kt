@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.flow.collectLatest
 import org.sopt.and.R
 import org.sopt.and.presentation.ui.component.InfoTextWithIcon
 import org.sopt.and.presentation.ui.component.textField.IDTextField
@@ -37,21 +38,20 @@ fun SignUpScreen(
     modifier: Modifier = Modifier
 ) {
     val signUpViewModel: SignUpViewModel = hiltViewModel()
-
-    val userId by signUpViewModel.userId.collectAsStateWithLifecycle()
-    val userPassWord by signUpViewModel.userPassWord.collectAsStateWithLifecycle()
-    val userHobby by signUpViewModel.userHobby.collectAsStateWithLifecycle()
-    val errorMessage by signUpViewModel.errorMessage.collectAsStateWithLifecycle()
-    val successMessage by signUpViewModel.successMessage.collectAsStateWithLifecycle()
-    val navigateToSignIn by signUpViewModel.navigateToSignIn.collectAsStateWithLifecycle()
+    val state by signUpViewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
-    if (navigateToSignIn) {
-        LaunchedEffect(Unit) {
-            Toast.makeText(context, successMessage ?: "회원가입 성공!", Toast.LENGTH_SHORT).show()
-            signUpViewModel.clearNavigationFlag()
-            navController.navigate(Routes.SignIn.route) {
-                popUpTo(Routes.SignUp.route) { inclusive = true }
+    LaunchedEffect(Unit) {
+        signUpViewModel.sideEffect.collectLatest { sideEffect ->
+            when (sideEffect) {
+                is SignUpSideEffect.ShowToast -> {
+                    Toast.makeText(context, sideEffect.message, Toast.LENGTH_SHORT).show()
+                }
+                is SignUpSideEffect.NavigateToSignIn -> {
+                    navController.navigate(Routes.SignIn.route) {
+                        popUpTo(Routes.SignUp.route) { inclusive = true }
+                    }
+                }
             }
         }
     }
@@ -76,8 +76,8 @@ fun SignUpScreen(
                 Spacer(Modifier.height(20.dp))
 
                 IDTextField(
-                    value = userId,
-                    onValueChange = { signUpViewModel.updateUserId(it) },
+                    value = state.userId,
+                    onValueChange = { signUpViewModel.setEvent(SignUpEvent.UserIdChanged(it)) },
                     modifier = Modifier.fillMaxWidth(),
                     placeholder = context.getString(R.string.signup_id)
                 )
@@ -89,8 +89,8 @@ fun SignUpScreen(
                 Spacer(Modifier.height(20.dp))
 
                 PasswordTextField(
-                    value = userPassWord,
-                    onValueChange = { signUpViewModel.updateUserPassword(it) },
+                    value = state.userPassWord,
+                    onValueChange = { signUpViewModel.setEvent(SignUpEvent.UserPasswordChanged(it)) },
                     placeholder = stringResource(R.string.signin_password)
                 )
                 Spacer(Modifier.height(10.dp))
@@ -100,8 +100,8 @@ fun SignUpScreen(
                 )
 
                 IDTextField(
-                    value = userHobby,
-                    onValueChange = { signUpViewModel.updateUserHobby(it) },
+                    value = state.userHobby,
+                    onValueChange = { signUpViewModel.setEvent(SignUpEvent.UserHobbyChanged(it)) },
                     modifier = Modifier.fillMaxWidth(),
                     placeholder = context.getString(R.string.signup_hobby)
                 )
@@ -115,7 +115,7 @@ fun SignUpScreen(
             ) {
                 Button(
                     onClick = {
-                        signUpViewModel.signUpUser()
+                        signUpViewModel.setEvent(SignUpEvent.SignUpClicked)
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -129,11 +129,6 @@ fun SignUpScreen(
                         text = stringResource(R.string.signup_button),
                         color = Color.White
                     )
-                }
-
-                errorMessage?.let {
-                    Spacer(Modifier.height(10.dp))
-                    Text(text = it, color = Color.Red)
                 }
             }
         }
