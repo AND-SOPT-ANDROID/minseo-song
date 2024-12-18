@@ -2,9 +2,11 @@ package org.sopt.and.presentation.ui.signin
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import org.sopt.and.R
 import org.sopt.and.domain.usecase.LoginUseCase
 import org.sopt.and.presentation.core.BaseViewModel
 import retrofit2.HttpException
@@ -39,7 +41,7 @@ class SignInViewModel @Inject constructor(
             result.onSuccess { response ->
                 saveToken(response.result.token)
                 setState { copy(isLoading = false) }
-                setSideEffect { SignInSideEffect.NavigateToMyScreen }
+                setSideEffect { SignInSideEffect.ShowSnackBar("로그인 성공!") }
             }.onFailure { error ->
                 val message = when (error) {
                     is HttpException -> "서버 오류: ${error.code()} ${error.message()}"

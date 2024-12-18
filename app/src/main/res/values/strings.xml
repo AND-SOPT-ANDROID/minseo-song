@@ -21,6 +21,7 @@
     <string name="signin_dash">|</string>
     <string name="signin_success">로그인 성공!</string>
     <string name="signin_fail">로그인 실패</string>
+    <string name="signin_snackbar">닫기</string>
 
 
     // My 화면

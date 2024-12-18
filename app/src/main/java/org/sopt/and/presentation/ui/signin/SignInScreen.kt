@@ -52,12 +52,24 @@ fun SignInScreen(
     val snackbarHostState = remember { SnackbarHostState() }
 
     signInViewModel.initializePreferences(context)
+    val actionLabel = stringResource(R.string.signin_snackbar)
 
     LaunchedEffect(Unit) {
         signInViewModel.sideEffect.collectLatest { sideEffect ->
             when (sideEffect) {
                 is SignInSideEffect.ShowSnackBar -> {
-                    snackbarHostState.showSnackbar(sideEffect.message)
+                    val result = snackbarHostState.showSnackbar(
+                        message = sideEffect.message,
+                        actionLabel = actionLabel,
+                        duration = SnackbarDuration.Indefinite
+
+                    )
+                    if (result == SnackbarResult.ActionPerformed){
+                        signInViewModel.setEvent(SignInEvent.SignInClicked)
+                        navController.navigate(Routes.My.route) {
+                            popUpTo(Routes.SignIn.route) { inclusive = true }
+                        }
+                    }
                 }
                 is SignInSideEffect.NavigateToMyScreen -> {
                     navController.navigate(Routes.My.route) {
